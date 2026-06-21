@@ -1,0 +1,2844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Cocktail Menu Trainer</title>
+    <style>
+        /* --- all styles unchanged --- */
+        :root {
+            --bg: #1a1a24;
+            --surface: #242433;
+            --surface2: #2e2e40;
+            --gold: #d4a96a;
+            --gold-light: #e8c97a;
+            --text: #e0dcd0;
+            --text-dim: #a09b90;
+            --accent-green: #5cb88d;
+            --accent-red: #d4756b;
+            --accent-purple: #b08fd4;
+            --border: #3a3a4a;
+            --radius: 10px;
+            --radius-sm: 6px;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+            --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --transition: 0.2s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        input,
+        textarea {
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font);
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+        }
+
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 4px 0;
+        }
+        .app-header .title-group h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 0.5px;
+        }
+        .app-header .subtitle {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .settings-btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            padding: 10px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            white-space: nowrap;
+            font-family: var(--font);
+        }
+        .settings-btn:active {
+            border-color: var(--gold);
+            color: var(--gold-light);
+            background: var(--surface2);
+        }
+
+        .category-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+        }
+        .cat-pill {
+            padding: 8px 14px;
+            border-radius: 20px;
+            border: 1.5px solid var(--border);
+            background: var(--surface);
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            white-space: nowrap;
+            font-family: var(--font);
+            transition: all var(--transition);
+        }
+        .cat-pill:active {
+            border-color: var(--gold);
+            color: var(--text);
+        }
+        .cat-pill.active {
+            background: var(--gold);
+            color: #1a1a24;
+            border-color: var(--gold);
+            font-weight: 600;
+        }
+        .cat-pill.focus-pill {
+            border-color: var(--accent-purple);
+            color: var(--accent-purple);
+        }
+        .cat-pill.focus-pill.active {
+            background: var(--accent-purple);
+            color: #fff;
+            border-color: var(--accent-purple);
+            font-weight: 600;
+        }
+
+        .diff-bar {
+            display: flex;
+            gap: 3px;
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 3px;
+            width: fit-content;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .diff-tab {
+            padding: 8px 14px;
+            border-radius: 20px;
+            border: none;
+            background: transparent;
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 0.78rem;
+            font-weight: 500;
+            white-space: nowrap;
+            font-family: var(--font);
+        }
+        .diff-tab:active {
+            color: var(--text);
+        }
+        .diff-tab.active {
+            background: var(--surface2);
+            color: var(--gold-light);
+            font-weight: 600;
+        }
+
+        .quiz-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 20px 16px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            min-height: 260px;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+        .quiz-card .drink-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--gold-light);
+            text-align: center;
+        }
+        .quiz-card .ingredient-count {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-top: -8px;
+        }
+        .quiz-card .hint-text {
+            text-align: center;
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .ingredient-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            max-height: 250px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 4px;
+        }
+        .ingredient-grid.all-ingredients {
+            max-height: 350px;
+        }
+        .ing-chit {
+            padding: 8px 12px;
+            border-radius: 18px;
+            border: 2px solid var(--border);
+            background: var(--surface2);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            font-family: var(--font);
+        }
+        .ing-chit:active {
+            border-color: var(--gold);
+            background: #35354a;
+        }
+        .ing-chit.selected {
+            background: var(--gold);
+            color: #1a1a24;
+            border-color: var(--gold);
+            font-weight: 600;
+        }
+        .ing-chit.correct-reveal {
+            background: var(--accent-green) !important;
+            color: #fff !important;
+            border-color: var(--accent-green) !important;
+        }
+        .ing-chit.incorrect-reveal {
+            background: var(--accent-red) !important;
+            color: #fff !important;
+            border-color: var(--accent-red) !important;
+        }
+        .ing-chit.missed-reveal {
+            border-color: var(--accent-green) !important;
+            border-style: dashed !important;
+        }
+
+        .role-slots {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .role-slot label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .role-slot input {
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border);
+            background: var(--surface2);
+            color: var(--text);
+            font-size: 0.9rem;
+            font-family: var(--font);
+            width: 100%;
+            -webkit-appearance: none;
+        }
+        .role-slot input:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+        .role-slot input.correct {
+            border-color: var(--accent-green) !important;
+            background: #2a3a30;
+        }
+        .role-slot input.partial {
+            border-color: #d4a040 !important;
+            background: #3a3528;
+        }
+        .role-slot input.incorrect {
+            border-color: var(--accent-red) !important;
+            background: #3a2828;
+        }
+        .role-feedback {
+            font-size: 0.7rem;
+            min-height: 16px;
+            padding-left: 4px;
+        }
+        .role-feedback .missed {
+            color: var(--accent-red);
+        }
+        .role-feedback .extra {
+            color: #d4a040;
+        }
+
+        .blank-input {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border);
+            background: var(--surface2);
+            color: var(--text);
+            font-size: 0.9rem;
+            font-family: var(--font);
+            resize: vertical;
+            -webkit-appearance: none;
+        }
+        .blank-input:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 10px 18px;
+            border-radius: 22px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-family: var(--font);
+            letter-spacing: 0.3px;
+        }
+        .btn-primary {
+            background: var(--gold);
+            color: #1a1a24;
+        }
+        .btn-primary:active {
+            background: var(--gold-light);
+            transform: scale(0.97);
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+        .btn-secondary:active {
+            border-color: var(--gold);
+            color: var(--gold-light);
+        }
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.78rem;
+            border-radius: 16px;
+        }
+        .btn:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .result-banner {
+            text-align: center;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .result-banner.perfect {
+            background: #2a3a30;
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+        }
+        .result-banner.good {
+            background: #3a3528;
+            color: #d4a040;
+            border: 1px solid #d4a040;
+        }
+        .result-banner.poor {
+            background: #3a2828;
+            color: var(--accent-red);
+            border: 1px solid var(--accent-red);
+        }
+
+        .progress-section {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+        }
+        .progress-section h3 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 6px;
+            max-height: 250px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .progress-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 8px;
+            border-radius: var(--radius-sm);
+            background: var(--surface2);
+            font-size: 0.7rem;
+        }
+        .progress-item .p-name {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .progress-bar-mini {
+            width: 35px;
+            height: 5px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .progress-bar-mini .fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.4s ease;
+        }
+        .fill.high {
+            background: var(--accent-green);
+        }
+        .fill.mid {
+            background: #d4a040;
+        }
+        .fill.low {
+            background: var(--accent-red);
+        }
+        .progress-item .pct {
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            width: 28px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .cheat-toggle {
+            text-align: center;
+            cursor: pointer;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            padding: 8px;
+        }
+        .cheat-toggle:active {
+            color: var(--gold-light);
+        }
+        .cheat-sheet {
+            display: none;
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 16px;
+            border: 1px solid var(--border);
+            max-height: 400px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .cheat-sheet.open {
+            display: block;
+        }
+        .cheat-sheet h3 {
+            color: var(--gold);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .cheat-drink {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .cheat-drink:last-child {
+            border-bottom: none;
+        }
+        .cheat-drink .cd-name {
+            font-weight: 700;
+            color: var(--gold-light);
+            font-size: 0.85rem;
+        }
+        .cheat-drink .cd-ingredients {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-top: 2px;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 100;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 16px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+        .modal-content {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 20px;
+            max-width: 700px;
+            width: 100%;
+            margin: 16px auto;
+            border: 1px solid var(--border);
+            max-height: 85vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .modal-content h2 {
+            color: var(--gold);
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-close {
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+        .settings-drink {
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+        .settings-drink h4 {
+            color: var(--gold-light);
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .settings-ingredient {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 4px;
+            font-size: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .settings-ingredient label {
+            flex: 1;
+            color: var(--text);
+            font-size: 0.78rem;
+            min-width: 80px;
+        }
+        .settings-ingredient input {
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            color: var(--text);
+            font-size: 0.78rem;
+            font-family: var(--font);
+            width: 80px;
+            -webkit-appearance: none;
+        }
+        .settings-ingredient input:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+        .settings-ingredient .role-badge {
+            font-size: 0.65rem;
+            background: var(--surface);
+            padding: 2px 8px;
+            border-radius: 10px;
+            color: var(--text-dim);
+            border: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        .settings-ingredient .del-ing-btn {
+            background: transparent;
+            border: none;
+            color: var(--accent-red);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0 4px;
+            font-weight: 700;
+            opacity: 0.6;
+        }
+        .settings-ingredient .del-ing-btn:active {
+            opacity: 1;
+        }
+        .focus-checkbox {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--accent-purple);
+            cursor: pointer;
+        }
+        .save-settings-btn {
+            display: block;
+            margin: 14px auto 0;
+            background: var(--gold);
+            color: #1a1a24;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .save-settings-btn:active {
+            background: var(--gold-light);
+            transform: scale(0.97);
+        }
+
+        .add-ing-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+            align-items: center;
+            background: var(--surface2);
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            border: 1px dashed var(--border);
+        }
+        .add-ing-form input,
+        .add-ing-form select {
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            font-size: 0.78rem;
+            font-family: var(--font);
+            -webkit-appearance: none;
+            min-width: 60px;
+        }
+        .add-ing-form input:focus,
+        .add-ing-form select:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+        .add-ing-form .add-ing-btn {
+            background: var(--gold);
+            color: #1a1a24;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+        .add-ing-form .add-ing-btn:active {
+            transform: scale(0.95);
+        }
+
+        .new-cocktail-section {
+            margin-top: 16px;
+            border-top: 2px solid var(--gold);
+            padding-top: 14px;
+        }
+        .new-cocktail-section h3 {
+            color: var(--gold);
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+        .new-cocktail-section .field-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .new-cocktail-section .field-row input,
+        .new-cocktail-section .field-row select {
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            color: var(--text);
+            font-size: 0.8rem;
+            font-family: var(--font);
+            flex: 1;
+            min-width: 100px;
+            -webkit-appearance: none;
+        }
+        .new-cocktail-section .field-row input:focus,
+        .new-cocktail-section .field-row select:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+        .new-ing-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+            margin-bottom: 4px;
+            background: var(--surface2);
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+        }
+        .new-ing-row input,
+        .new-ing-row select {
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            font-size: 0.75rem;
+            font-family: var(--font);
+            flex: 1;
+            min-width: 60px;
+            -webkit-appearance: none;
+        }
+        .new-ing-row input:focus,
+        .new-ing-row select:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+        .new-ing-row .del-new-ing {
+            background: transparent;
+            border: none;
+            color: var(--accent-red);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0 4px;
+            font-weight: 700;
+            opacity: 0.6;
+        }
+        .new-ing-row .del-new-ing:active {
+            opacity: 1;
+        }
+        .new-cocktail-section .add-row-btn {
+            background: var(--surface2);
+            border: 1px dashed var(--border);
+            color: var(--text-dim);
+            padding: 4px 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-family: var(--font);
+        }
+        .new-cocktail-section .add-row-btn:active {
+            border-color: var(--gold);
+            color: var(--gold-light);
+        }
+        .new-cocktail-section .save-cocktail-btn {
+            background: var(--accent-green);
+            color: #1a1a24;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 6px;
+        }
+        .new-cocktail-section .save-cocktail-btn:active {
+            transform: scale(0.97);
+            opacity: 0.8;
+        }
+
+        .hint-toggle {
+            text-align: center;
+            margin-top: -4px;
+        }
+        .hint-toggle button {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            padding: 4px 14px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-family: var(--font);
+            font-weight: 500;
+        }
+        .hint-toggle button:active {
+            border-color: var(--gold);
+            color: var(--gold-light);
+        }
+
+        /* new styles for glassware/garnish rows */
+        .select-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin: 4px 0;
+        }
+        .select-row .label {
+            width: 100%;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gold);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .select-row .chit {
+            padding: 6px 14px;
+            border-radius: 18px;
+            border: 2px solid var(--border);
+            background: var(--surface2);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            font-family: var(--font);
+        }
+        .select-row .chit:active {
+            border-color: var(--gold);
+            background: #35354a;
+        }
+        .select-row .chit.selected {
+            background: var(--gold);
+            color: #1a1a24;
+            border-color: var(--gold);
+            font-weight: 600;
+        }
+        .select-row .chit.correct-reveal {
+            background: var(--accent-green) !important;
+            color: #fff !important;
+            border-color: var(--accent-green) !important;
+        }
+        .select-row .chit.incorrect-reveal {
+            background: var(--accent-red) !important;
+            color: #fff !important;
+            border-color: var(--accent-red) !important;
+        }
+        .select-row .chit.missed-reveal {
+            border-color: var(--accent-green) !important;
+            border-style: dashed !important;
+        }
+
+        .extra-fields {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 6px 0;
+        }
+        .extra-fields .field {
+            flex: 1;
+            min-width: 120px;
+        }
+        .extra-fields .field label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+        .extra-fields .field input {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border);
+            background: var(--surface2);
+            color: var(--text);
+            font-size: 0.85rem;
+            font-family: var(--font);
+        }
+        .extra-fields .field input:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+        .extra-fields .field input.correct {
+            border-color: var(--accent-green) !important;
+            background: #2a3a30;
+        }
+        .extra-fields .field input.incorrect {
+            border-color: var(--accent-red) !important;
+            background: #3a2828;
+        }
+        .extra-fields .field .fb {
+            font-size: 0.7rem;
+            min-height: 16px;
+            padding-left: 2px;
+        }
+
+        @media (max-width: 400px) {
+            .app-container {
+                padding: 8px;
+                gap: 8px;
+            }
+            .quiz-card {
+                padding: 14px 10px;
+                gap: 10px;
+            }
+            .quiz-card .drink-name {
+                font-size: 1.15rem;
+            }
+            .ing-chit {
+                padding: 6px 10px;
+                font-size: 0.75rem;
+            }
+            .diff-tab {
+                padding: 6px 10px;
+                font-size: 0.72rem;
+            }
+            .btn {
+                padding: 8px 14px;
+                font-size: 0.8rem;
+            }
+            .cat-pill {
+                padding: 6px 10px;
+                font-size: 0.75rem;
+            }
+            .progress-grid {
+                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            }
+            .settings-ingredient input {
+                width: 60px;
+            }
+            .add-ing-form input,
+            .add-ing-form select {
+                min-width: 50px;
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-header">
+            <div class="title-group">
+                <h1>🍸 Cocktail Trainer</h1>
+                <div class="subtitle">Learn every cocktail</div>
+            </div>
+            <button class="settings-btn" id="openSettingsBtn">⚙️ Settings</button>
+        </div>
+
+        <div class="category-bar" id="categoryBar">
+            <button class="cat-pill active" data-cat="all">All</button>
+            <button class="cat-pill focus-pill" data-cat="focus">🎯 Focus</button>
+            <button class="cat-pill" data-cat="Creamy & Dessert">Creamy</button>
+            <button class="cat-pill" data-cat="Egg White Sours">Egg White</button>
+            <button class="cat-pill" data-cat="Fruity & Refreshing">Fruity</button>
+            <button class="cat-pill" data-cat="Stirred & Spirit-Forward">Stirred</button>
+        </div>
+
+        <div class="diff-bar" id="diffBar">
+            <button class="diff-tab active" data-level="1">L1: Pick Set</button>
+            <button class="diff-tab" data-level="2">L2: All Picks</button>
+            <button class="diff-tab" data-level="3">L3: Roles</button>
+            <button class="diff-tab" data-level="4">L4: Recipe</button>
+        </div>
+
+        <div class="quiz-card" id="quizCard">
+            <div class="drink-name" id="drinkName">--</div>
+            <div class="ingredient-count" id="ingCount"></div>
+            <div class="hint-text" id="hintText"></div>
+            <div id="quizContent"></div>
+            <div id="resultBanner"></div>
+            <div class="hint-toggle" id="l3HintToggle" style="display:none;">
+                <button id="l3ToggleBtn">👁️ Hide hints</button>
+            </div>
+            <div class="hint-toggle" id="l4HintToggle" style="display:none;">
+                <button id="l4ToggleBtn">👁️ Hide ingredient count</button>
+            </div>
+            <div class="btn-row" id="btnRow">
+                <button class="btn btn-primary" id="btnSubmit">Check</button>
+                <button class="btn btn-secondary" id="btnSkip">Reveal</button>
+                <button class="btn btn-secondary" id="btnNext" style="display:none;">Next →</button>
+            </div>
+        </div>
+
+        <div class="progress-section" id="progressSection">
+            <h3>📊 Progress (L<span id="progressLevelLabel">1</span>)</h3>
+            <div class="progress-grid" id="progressGrid"></div>
+            <div style="text-align:center;margin-top:8px;">
+                <button class="btn btn-sm btn-secondary" id="btnResetProgress">Reset Progress</button>
+            </div>
+        </div>
+
+        <div class="cheat-toggle" id="cheatToggle">📋 Show Full Menu ▾</div>
+        <div class="cheat-sheet" id="cheatSheet"></div>
+
+        <div class="modal-overlay" id="settingsModal">
+            <div class="modal-content" id="settingsContent"></div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ─────────────────────────────────────
+            // COCKTAIL DATA (base) – updated with glassware & garnish
+            // ─────────────────────────────────────
+            const baseCocktails = [{
+                name: 'White Chocolate Espresso Martini',
+                category: 'Creamy & Dessert',
+                glassware: 'Coupe',
+                garnish: 'cocoa powder',
+                ingredients: [
+                    { full: 'Absolut Vanilla Vodka', role: 'spirit', matchKeys: ['vanilla vodka',
+                            'absolut vanilla vodka', 'absolut vanilla'
+                        ], measurement: '25ml' },
+                    { full: 'Coole Swan Cream Liqueur', role: 'liqueur', matchKeys: ['coole swan cream liqueur',
+                            'coole swan', 'cream liqueur', 'irish cream liqueur'
+                        ], measurement: '25ml' },
+                    { full: 'Crème de Cacao White Chocolate Liqueur', role: 'liqueur', matchKeys: [
+                            'creme de cacao', 'crème de cacao', 'white chocolate liqueur',
+                            'cacao liqueur'
+                        ], measurement: '15ml' },
+                    { full: 'Coffee', role: 'mixer', matchKeys: ['coffee', 'espresso'], measurement: '80ml' },
+                    { full: 'Sugar Syrup', role: 'liqueur', matchKeys: ['sugar syrup', 'simple syrup'],
+                        measurement: '25ml' }
+                ]
+            }, {
+                name: 'Pina Claddagh',
+                category: 'Creamy & Dessert',
+                glassware: 'White wine glass',
+                garnish: 'dehydrated pineapple and mint',
+                ingredients: [
+                    { full: 'Absolut Vanilla Vodka', role: 'spirit', matchKeys: ['vanilla vodka',
+                            'absolut vanilla vodka', 'absolut vanilla'
+                        ], measurement: '25ml' },
+                    { full: 'Havana 3-Year-Old Rum', role: 'spirit', matchKeys: ['havana rum',
+                            'havana 3 year old', 'white rum', 'havana club'
+                        ], measurement: '25ml' },
+                    { full: 'Micil Irish Cream Liqueur', role: 'liqueur', matchKeys: ['micil irish cream',
+                            'micil cream liqueur', 'irish cream liqueur', 'micil'
+                        ], measurement: '15ml' },
+                    { full: 'Coconut Syrup', role: 'liqueur', matchKeys: ['coconut syrup', 'coconut'],
+                        measurement: '25ml' },
+                    { full: 'Pineapple Puree', role: 'liqueur', matchKeys: ['pineapple puree'],
+                    measurement: '25ml' },
+                    { full: 'Pineapple Juice', role: 'mixer', matchKeys: ['pineapple juice', 'pineapple'],
+                        measurement: '25ml' },
+                    { full: 'Lime Juice', role: 'mixer', matchKeys: ['lime juice', 'lime'],
+                    measurement: '15ml' }
+                ]
+            }, {
+                name: 'Solero',
+                category: 'Creamy & Dessert',
+                glassware: 'White wine glass',
+                garnish: 'orange slice and mint sprig',
+                ingredients: [
+                    { full: 'Absolut Mandarin Vodka', role: 'spirit', matchKeys: ['mandarin vodka',
+                            'absolut mandarin vodka', 'absolut mandarin', 'mandarin'
+                        ], measurement: '25ml' },
+                    { full: 'Micil Irish Cream Liqueur', role: 'liqueur', matchKeys: ['micil irish cream',
+                            'micil cream liqueur', 'irish cream liqueur', 'micil'
+                        ], measurement: '15ml' },
+                    { full: 'Galliano Vanilla Liqueur', role: 'liqueur', matchKeys: ['galliano vanilla',
+                            'galliano vanilla liqueur', 'galliano', 'vanilla liqueur'
+                        ], measurement: '15ml' },
+                    { full: 'Passion Fruit Syrup', role: 'liqueur', matchKeys: ['passion fruit syrup',
+                            'passionfruit syrup', 'passion fruit', 'passionfruit'
+                        ], measurement: '15ml' },
+                    { full: 'Orange Juice', role: 'mixer', matchKeys: ['orange juice', 'orange'],
+                        measurement: '100ml' },
+                    { full: 'Orange Bitters', role: 'liqueur', matchKeys: ['orange bitters'],
+                    measurement: '2dash' }
+                ]
+            }, {
+                name: 'Iced Irish Coffee',
+                category: 'Creamy & Dessert',
+                glassware: '',
+                garnish: 'cocoa powder',
+                ingredients: [
+                    { full: "Sailor's Home 'The Journey' Irish Whiskey", role: 'spirit', matchKeys: [
+                            'sailors home', 'the journey', 'irish whiskey', 'sailors home whiskey'
+                        ], measurement: '35ml' },
+                    { full: 'Micil Cream Liqueur', role: 'liqueur', matchKeys: ['micil cream liqueur',
+                            'micil', 'irish cream liqueur'
+                        ], measurement: '15ml' },
+                    { full: 'Coffee', role: 'mixer', matchKeys: ['coffee', 'espresso'], measurement: '50ml' },
+                    { full: 'Sugar Syrup', role: 'liqueur', matchKeys: ['sugar', 'sugar syrup'],
+                    measurement: '30ml' },
+                    { full: 'Cream', role: 'mixer', matchKeys: ['cream', 'topped with cream',
+                            'fresh cream'
+                        ], measurement: 'top' }
+                ]
+            }, {
+                name: 'Twister',
+                category: 'Creamy & Dessert',
+                glassware: '',
+                garnish: '',
+                ingredients: [
+                    { full: 'Absolut Pear Vodka', role: 'spirit', matchKeys: ['pear vodka',
+                            'absolut pear vodka', 'absolut pear', 'pear'
+                        ], measurement: '35ml' },
+                    { full: 'Galliano Vanilla Liqueur', role: 'liqueur', matchKeys: ['galliano vanilla',
+                            'galliano vanilla liqueur', 'galliano', 'vanilla liqueur'
+                        ], measurement: '15ml' },
+                    { full: 'Micil Irish Cream Liqueur', role: 'liqueur', matchKeys: ['micil irish cream',
+                            'micil cream liqueur', 'irish cream liqueur', 'micil'
+                        ], measurement: '15ml' },
+                    { full: 'Lime Juice', role: 'mixer', matchKeys: ['lime juice', 'lime'],
+                    measurement: '25ml' },
+                    { full: 'Cranberry Juice', role: 'mixer', matchKeys: ['cranberry juice',
+                            'cranberry'
+                        ], measurement: '50ml' },
+                    { full: 'Strawberry Syrup', role: 'liqueur', matchKeys: ['strawberry syrup',
+                            'strawberry'
+                        ], measurement: '25ml' }
+                ]
+            }, {
+                name: 'Raspberry Ripple',
+                category: 'Egg White Sours',
+                glassware: 'Coupe',
+                garnish: 'mint leaf',
+                ingredients: [
+                    { full: 'Beefeater Pink Gin', role: 'spirit', matchKeys: ['pink gin',
+                            'beefeater pink gin', 'beefeater pink'
+                        ], measurement: '40ml' },
+                    { full: 'Chambord Raspberry Liqueur', role: 'liqueur', matchKeys: ['chambord',
+                            'raspberry liqueur', 'chambord raspberry'
+                        ], measurement: '15ml' },
+                    { full: 'Grenadine', role: 'liqueur', matchKeys: ['grenadine'], measurement: '15ml' },
+                    { full: 'Cranberry Juice', role: 'mixer', matchKeys: ['cranberry juice',
+                            'cranberry'
+                        ], measurement: '20ml' },
+                    { full: 'Raspberry Syrup', role: 'liqueur', matchKeys: ['raspberry syrup',
+                            'raspberry'
+                        ], measurement: '25ml' },
+                    { full: 'Lemon Juice', role: 'mixer', matchKeys: ['lemon juice', 'lemon'],
+                        measurement: '25ml' },
+                    { full: 'Mint Leaves', role: 'other', matchKeys: ['mint leaves', 'mint',
+                            'fresh mint'
+                        ], measurement: '' },
+                    { full: 'Grapefruit Bitters', role: 'liqueur', matchKeys: ['grapefruit bitters'],
+                        measurement: '' },
+                    { full: 'Pasteurised Egg Whites', role: 'other', matchKeys: ['egg whites',
+                            'egg white', 'pasteurised egg whites'
+                        ], measurement: '35ml' }
+                ]
+            }, {
+                name: "Sailor's Home Whiskey Sour",
+                category: 'Egg White Sours',
+                glassware: '',
+                garnish: '',
+                ingredients: [
+                    { full: "Sailor's Home 'The Journey' Irish Whiskey", role: 'spirit', matchKeys: [
+                            'sailors home', 'the journey', 'irish whiskey'
+                        ], measurement: '50ml' },
+                    { full: 'Sugar Syrup', role: 'liqueur', matchKeys: ['sugar syrup', 'simple syrup'],
+                        measurement: '25ml' },
+                    { full: 'Lemon Juice', role: 'mixer', matchKeys: ['lemon juice', 'lemon'],
+                        measurement: '25ml' },
+                    { full: 'Pasteurised Egg Whites', role: 'other', matchKeys: ['egg whites',
+                            'egg white', 'pasteurised egg whites'
+                        ], measurement: '25ml' }
+                ]
+            }, {
+                name: 'Pure Notions',
+                category: 'Egg White Sours',
+                glassware: '',
+                garnish: '',
+                ingredients: [
+                    { full: 'Absolut Raspberry Vodka', role: 'spirit', matchKeys: ['raspberry vodka',
+                            'absolut raspberry vodka', 'absolut raspberry'
+                        ], measurement: '40ml' },
+                    { full: 'Blue Curaçao', role: 'liqueur', matchKeys: ['blue curaçao',
+                            'blue curacao', 'curaçao'
+                        ], measurement: '20ml' },
+                    { full: 'Green Apple Syrup', role: 'liqueur', matchKeys: ['green apple syrup',
+                            'apple syrup', 'green apple'
+                        ], measurement: '15ml' },
+                    { full: 'Peach Syrup', role: 'liqueur', matchKeys: ['peach syrup', 'peach'],
+                        measurement: '15ml' },
+                    { full: 'Lemon Juice', role: 'mixer', matchKeys: ['lemon juice', 'lemon'],
+                        measurement: '30ml' },
+                    { full: 'Sugar Syrup', role: 'liqueur', matchKeys: ['sugar syrup', 'simple syrup'],
+                        measurement: '10ml' },
+                    { full: 'Orange Juice', role: 'mixer', matchKeys: ['orange juice', 'orange'],
+                        measurement: '30ml' },
+                    { full: 'Pasteurised Egg Whites', role: 'other', matchKeys: ['egg whites',
+                            'egg white', 'pasteurised egg whites'
+                        ], measurement: '35ml' }
+                ]
+            }, {
+                name: 'Claddagh Sunrise Sting',
+                category: 'Egg White Sours',
+                glassware: 'Hobstar glass',
+                garnish: '',
+                ingredients: [
+                    { full: 'Olmeca Silver Tequila', role: 'spirit', matchKeys: ['silver tequila',
+                            'olmeca tequila', 'olmeca silver', 'tequila'
+                        ], measurement: '35ml' },
+                    { full: 'Aperol', role: 'liqueur', matchKeys: ['aperol'], measurement: '15ml' },
+                    { full: 'Strawberry Syrup', role: 'liqueur', matchKeys: ['strawberry syrup',
+                            'strawberry'
+                        ], measurement: '25ml' },
+                    { full: 'Lemon Juice', role: 'mixer', matchKeys: ['lemon juice', 'lemon'],
+                        measurement: '20ml' },
+                    { full: 'Pasteurised Egg Whites', role: 'other', matchKeys: ['egg whites',
+                            'egg white', 'pasteurised egg whites'
+                        ], measurement: '30ml' }
+                ]
+            }, {
+                name: 'Pornstar Martini',
+                category: 'Egg White Sours',
+                glassware: 'Coupe',
+                garnish: 'cranberry bitters and dehydrated lime wheel',
+                ingredients: [
+                    { full: 'Absolut Vanilla Vodka', role: 'spirit', matchKeys: ['vanilla vodka',
+                            'absolut vanilla vodka', 'absolut vanilla'
+                        ], measurement: '25ml' },
+                    { full: 'Absolut Mango Vodka', role: 'spirit', matchKeys: ['mango vodka',
+                            'absolut mango vodka', 'absolut mango', 'mango'
+                        ], measurement: '25ml' },
+                    { full: 'Passion Fruit Syrup', role: 'liqueur', matchKeys: ['passion fruit syrup',
+                            'passionfruit syrup', 'passion fruit'
+                        ], measurement: '25ml' },
+                    { full: 'Lime Juice', role: 'mixer', matchKeys: ['lime juice', 'lime'],
+                        measurement: '25ml' },
+                    { full: 'Orange Juice', role: 'mixer', matchKeys: ['orange juice', 'orange'],
+                        measurement: '80ml' },
+                    { full: 'Pasteurised Egg Whites', role: 'other', matchKeys: ['egg whites',
+                            'egg white', 'pasteurised egg whites'
+                        ], measurement: '35ml' },
+                    { full: 'Shot of Prosecco', role: 'mixer', matchKeys: ['prosecco',
+                            'shot of prosecco', 'prosecco shot'
+                        ], measurement: '' }
+                ]
+            }, {
+                name: 'Summer Refresher',
+                category: 'Egg White Sours',
+                glassware: 'Coupe',
+                garnish: '',
+                ingredients: [
+                    { full: 'Tequila Rose', role: 'spirit', matchKeys: ['tequila rose',
+                            'tequila rose liqueur'
+                        ], measurement: '25ml' },
+                    { full: 'Beefeater Pink Gin', role: 'spirit', matchKeys: ['pink gin',
+                            'beefeater pink gin', 'beefeater pink'
+                        ], measurement: '25ml' },
+                    { full: 'Apple Juice', role: 'mixer', matchKeys: ['apple juice', 'apple'],
+                        measurement: '25ml' },
+                    { full: 'Cranberry Juice', role: 'mixer', matchKeys: ['cranberry juice',
+                            'cranberry'
+                        ], measurement: '25ml' },
+                    { full: 'Lemon Juice', role: 'mixer', matchKeys: ['lemon juice', 'lemon'],
+                        measurement: '15ml' },
+                    { full: 'Strawberry Syrup', role: 'liqueur', matchKeys: ['strawberry syrup',
+                            'strawberry'
+                        ], measurement: '25ml' },
+                    { full: 'Pasteurised Egg Whites', role: 'other', matchKeys: ['egg whites',
+                            'egg white', 'pasteurised egg whites'
+                        ], measurement: '30ml' }
+                ]
+            }, {
+                name: 'Westend Bramble',
+                category: 'Egg White Sours',
+                glassware: 'Coupe',
+                garnish: '',
+                ingredients: [
+                    { full: 'Beefeater Gin', role: 'spirit', matchKeys: ['gin', 'beefeater gin',
+                            'beefeater', 'london dry gin'
+                        ], measurement: '35ml' },
+                    { full: 'Violet Liqueur', role: 'liqueur', matchKeys: ['violet liqueur',
+                            'violet'
+                        ], measurement: '15ml' },
+                    { full: 'Triple Sec', role: 'liqueur', matchKeys: ['triple sec',
+                            'triple sec liqueur'
+                        ], measurement: '15ml' },
+                    { full: 'Lemon Juice', role: 'mixer', matchKeys: ['lemon juice', 'lemon'],
+                        measurement: '20ml' },
+                    { full: 'Blackberry Syrup', role: 'liqueur', matchKeys: ['blackberry syrup',
+                            'blackberry'
+                        ], measurement: '20ml' },
+                    { full: 'Pasteurised Egg Whites', role: 'other', matchKeys: ['egg whites',
+                            'egg white', 'pasteurised egg whites'
+                        ], measurement: '30ml' }
+                ]
+            }, {
+                name: 'Sweet Devil',
+                category: 'Fruity & Refreshing',
+                glassware: 'Hobstar glass',
+                garnish: 'Tajin Rim',
+                ingredients: [
+                    { full: 'Olmeca Silver Tequila', role: 'spirit', matchKeys: ['silver tequila',
+                            'olmeca tequila', 'olmeca silver', 'tequila'
+                        ], measurement: '35ml' },
+                    { full: 'Limoncello Lemon Liqueur', role: 'liqueur', matchKeys: ['limoncello',
+                            'limoncello lemon liqueur', 'lemon liqueur'
+                        ], measurement: '15ml' },
+                    { full: 'Strawberry Syrup', role: 'liqueur', matchKeys: ['strawberry syrup',
+                            'strawberry'
+                        ], measurement: '25ml' },
+                    { full: 'Sugar Syrup', role: 'liqueur', matchKeys: ['sugar syrup', 'simple syrup'],
+                        measurement: '15ml' }
+                ]
+            }, {
+                name: 'Pearadise Punch',
+                category: 'Fruity & Refreshing',
+                glassware: 'White wine glass',
+                garnish: '',
+                ingredients: [
+                    { full: 'Xanté Pear Brandy Liqueur', role: 'liqueur', matchKeys: ['xanté',
+                            'xante', 'pear brandy liqueur', 'xante pear', 'pear brandy'
+                        ], measurement: '35.5ml' },
+                    { full: 'Falernum Liqueur', role: 'liqueur', matchKeys: ['falernum',
+                            'falernum liqueur'
+                        ], measurement: '10ml' },
+                    { full: 'Ginger Syrup', role: 'liqueur', matchKeys: ['ginger syrup', 'ginger'],
+                        measurement: '25ml' },
+                    { full: 'Peach Syrup', role: 'liqueur', matchKeys: ['peach syrup', 'peach'],
+                        measurement: '25ml' },
+                    { full: 'Lemon Juice', role: 'mixer', matchKeys: ['lemon juice', 'lemon'],
+                        measurement: '25ml' },
+                    { full: 'Apple Juice', role: 'mixer', matchKeys: ['apple juice', 'apple'],
+                        measurement: '80ml' }
+                ]
+            }, {
+                name: 'Electric Island',
+                category: 'Fruity & Refreshing',
+                glassware: 'Hobstar glass',
+                garnish: 'orange slice',
+                ingredients: [
+                    { full: 'Malibu', role: 'liqueur', matchKeys: ['malibu', 'malibu coconut rum',
+                            'coconut rum'
+                        ], measurement: '30ml' },
+                    { full: 'Blue Curaçao', role: 'liqueur', matchKeys: ['blue curaçao',
+                            'blue curacao', 'curaçao'
+                        ], measurement: '15ml' },
+                    { full: 'Absolut Mango Vodka', role: 'spirit', matchKeys: ['mango vodka',
+                            'absolut mango vodka', 'absolut mango', 'mango'
+                        ], measurement: '15ml' },
+                    { full: 'Passion Fruit Syrup', role: 'liqueur', matchKeys: ['passion fruit syrup',
+                            'passionfruit syrup', 'passion fruit'
+                        ], measurement: '15ml' },
+                    { full: 'Lime Juice', role: 'mixer', matchKeys: ['lime juice', 'lime'],
+                        measurement: '15ml' },
+                    { full: 'Orange Juice', role: 'mixer', matchKeys: ['orange juice', 'orange'],
+                        measurement: '50ml' }
+                ]
+            }, {
+                name: 'Pineapple Daiquiri (Pitcher)',
+                category: 'Fruity & Refreshing',
+                glassware: 'Highball',
+                garnish: '',
+                ingredients: [
+                    { full: 'Pineapple Plantation Rum', role: 'spirit', matchKeys: ['plantation rum',
+                            'pineapple plantation rum', 'pineapple rum'
+                        ], measurement: '50ml' },
+                    { full: 'Havana 3-Year-Old Rum', role: 'spirit', matchKeys: ['havana rum',
+                            'havana 3 year old', 'white rum', 'havana club'
+                        ], measurement: '100ml' },
+                    { full: 'Falernum Liqueur', role: 'liqueur', matchKeys: ['falernum',
+                            'falernum liqueur'
+                        ], measurement: '50ml' },
+                    { full: 'Pineapple Puree', role: 'liqueur', matchKeys: ['pineapple puree'],
+                        measurement: '100ml' },
+                    { full: 'Pineapple Juice', role: 'mixer', matchKeys: ['pineapple juice',
+                            'pineapple'
+                        ], measurement: 'top' },
+                    { full: 'Lime Juice', role: 'mixer', matchKeys: ['lime juice', 'lime'],
+                        measurement: '100ml' }
+                ]
+            }, {
+                name: 'Class Act',
+                category: 'Fruity & Refreshing',
+                glassware: 'White wine glass',
+                garnish: 'lime wheel',
+                ingredients: [
+                    { full: 'Absolut Passion Fruit Vodka', role: 'spirit', matchKeys: [
+                            'passion fruit vodka', 'passionfruit vodka', 'absolut passion fruit'
+                        ], measurement: '35ml' },
+                    { full: 'Malibu', role: 'liqueur', matchKeys: ['malibu', 'malibu coconut rum',
+                            'coconut rum'
+                        ], measurement: '15ml' },
+                    { full: 'Watermelon Syrup', role: 'liqueur', matchKeys: ['watermelon syrup',
+                            'watermelon'
+                        ], measurement: '25ml' },
+                    { full: 'Cranberry Juice', role: 'mixer', matchKeys: ['cranberry juice',
+                            'cranberry'
+                        ], measurement: '50ml' },
+                    { full: 'Lime Juice', role: 'mixer', matchKeys: ['lime juice', 'lime'],
+                        measurement: '20ml' },
+                    { full: 'Soda Water', role: 'mixer', matchKeys: ['soda water', 'soda',
+                            'sparkling water', 'club soda'
+                        ], measurement: 'top' }
+                ]
+            }, {
+                name: 'Juicy Drop',
+                category: 'Fruity & Refreshing',
+                glassware: 'Coupe',
+                garnish: 'lime wheel',
+                ingredients: [
+                    { full: 'Jack Daniels Apple', role: 'spirit', matchKeys: ['jack daniels apple',
+                            'jack daniels apple whiskey', 'jd apple', 'apple whiskey',
+                            'jack daniels'
+                        ], measurement: '' },
+                    { full: 'Archers Peach Schnapps', role: 'liqueur', matchKeys: ['archers peach schnapps',
+                            'archers', 'peach schnapps'
+                        ], measurement: '' },
+                    { full: 'Apple Juice', role: 'mixer', matchKeys: ['apple juice', 'apple'],
+                        measurement: '' },
+                    { full: 'Green Apple Syrup', role: 'liqueur', matchKeys: ['green apple syrup',
+                            'apple syrup', 'green apple'
+                        ], measurement: '' },
+                    { full: 'Lime Juice', role: 'mixer', matchKeys: ['lime juice', 'lime'],
+                        measurement: '' },
+                    { full: 'Sugar Syrup', role: 'liqueur', matchKeys: ['sugar syrup', 'simple syrup'],
+                        measurement: '' }
+                ]
+            }, {
+                name: 'Watermelon Buzzer',
+                category: 'Fruity & Refreshing',
+                glassware: '',
+                garnish: '',
+                ingredients: [
+                    { full: 'Olmeca Silver Tequila', role: 'spirit', matchKeys: ['silver tequila',
+                            'olmeca tequila', 'olmeca silver', 'tequila'
+                        ], measurement: '' },
+                    { full: 'Cointreau', role: 'liqueur', matchKeys: ['cointreau', 'triple sec',
+                            'orange liqueur'
+                        ], measurement: '' },
+                    { full: 'Lime Juice', role: 'mixer', matchKeys: ['lime juice', 'lime'],
+                        measurement: '' },
+                    { full: 'Watermelon Syrup', role: 'liqueur', matchKeys: ['watermelon syrup',
+                            'watermelon'
+                        ], measurement: '' },
+                    { full: 'Jalapeño Syrup', role: 'liqueur', matchKeys: ['jalapeño syrup',
+                            'jalapeno syrup', 'chilli syrup', 'jalapeño', 'jalapeno'
+                        ], measurement: '' }
+                ]
+            }, {
+                name: "Taylor's Shift",
+                category: 'Fruity & Refreshing',
+                glassware: '',
+                garnish: '',
+                ingredients: [
+                    { full: 'Dingle Gin', role: 'spirit', matchKeys: ['gin', 'dingle gin',
+                            'dingle'
+                        ], measurement: '' },
+                    { full: 'St. Germain Elderflower Liqueur', role: 'liqueur', matchKeys: ['st germain',
+                            'saint germain', 'elderflower liqueur', 'elderflower'
+                        ], measurement: '' },
+                    { full: 'Lemon Juice', role: 'mixer', matchKeys: ['lemon juice', 'lemon'],
+                        measurement: '' },
+                    { full: 'Sugar Syrup', role: 'liqueur', matchKeys: ['sugar syrup', 'simple syrup'],
+                        measurement: '' },
+                    { full: 'Soda Water', role: 'mixer', matchKeys: ['soda water', 'soda',
+                            'sparkling water', 'club soda'
+                        ], measurement: '' }
+                ]
+            }, {
+                name: 'Dirty Mojo',
+                category: 'Fruity & Refreshing',
+                glassware: '',
+                garnish: '',
+                ingredients: [
+                    { full: 'Havana Especial Rum', role: 'spirit', matchKeys: ['havana especial',
+                            'havana rum', 'havana especial rum', 'dark rum', 'havana'
+                        ], measurement: '50ml' },
+                    { full: 'Lime Juice', role: 'mixer', matchKeys: ['lime juice', 'lime'],
+                        measurement: '25ml' },
+                    { full: 'Sugar Syrup', role: 'liqueur', matchKeys: ['sugar syrup', 'simple syrup'],
+                        measurement: '25ml' },
+                    { full: 'Fresh Mint Leaves', role: 'other', matchKeys: ['mint leaves', 'mint',
+                            'fresh mint'
+                        ], measurement: '' },
+                    { full: 'Soda Water', role: 'mixer', matchKeys: ['soda water', 'soda',
+                            'sparkling water', 'club soda'
+                        ], measurement: 'top' }
+                ]
+            }, {
+                name: "How'ya Loveens",
+                category: 'Fruity & Refreshing',
+                glassware: 'Red wine glass',
+                garnish: 'lime wheel and mint sprig',
+                ingredients: [
+                    { full: 'Absolut Raspberry Vodka', role: 'spirit', matchKeys: ['raspberry vodka',
+                            'absolut raspberry vodka', 'absolut raspberry'
+                        ], measurement: '50ml' },
+                    { full: 'Lemon Juice', role: 'mixer', matchKeys: ['lemon juice', 'lemon'],
+                        measurement: '25ml' },
+                    { full: 'Cranberry Juice', role: 'mixer', matchKeys: ['cranberry juice',
+                            'cranberry'
+                        ], measurement: '40ml' },
+                    { full: 'Strawberry Syrup', role: 'liqueur', matchKeys: ['strawberry syrup',
+                            'strawberry'
+                        ], measurement: '25ml' },
+                    { full: 'Peach Bitters', role: 'liqueur', matchKeys: ['peach bitters'],
+                        measurement: '2dash' },
+                    { full: 'Soda Water', role: 'mixer', matchKeys: ['soda water', 'soda',
+                            'sparkling water', 'club soda'
+                        ], measurement: 'top' }
+                ]
+            }, {
+                name: 'Venom Apple',
+                category: 'Fruity & Refreshing',
+                glassware: 'Red wine glass',
+                garnish: '',
+                ingredients: [
+                    { full: 'Crème de Menth', role: 'liqueur', matchKeys: ['creme de menth',
+                            'crème de menth', 'creme de menthe', 'mint liqueur'
+                        ], measurement: '' },
+                    { full: 'Midori Melon Liqueur', role: 'liqueur', matchKeys: ['midori',
+                            'melon liqueur', 'midori melon liqueur'
+                        ], measurement: '' },
+                    { full: 'Green Apple Syrup', role: 'liqueur', matchKeys: ['green apple syrup',
+                            'apple syrup', 'green apple'
+                        ], measurement: '' },
+                    { full: 'Apple Juice', role: 'mixer', matchKeys: ['apple juice', 'apple'],
+                        measurement: '' },
+                    { full: 'Lime Juice', role: 'mixer', matchKeys: ['lime juice', 'lime'],
+                        measurement: '' },
+                    { full: 'Sugar Syrup', role: 'liqueur', matchKeys: ['sugar syrup', 'simple syrup'],
+                        measurement: '' }
+                ]
+            }, {
+                name: 'Songkran Sunset',
+                category: 'Fruity & Refreshing',
+                glassware: 'Hobstar glass',
+                garnish: 'Tajin Rim',
+                ingredients: [
+                    { full: 'Absolut Mango Vodka', role: 'spirit', matchKeys: ['mango vodka',
+                            'absolut mango vodka', 'absolut mango', 'mango'
+                        ], measurement: '' },
+                    { full: 'Falernum Liqueur', role: 'liqueur', matchKeys: ['falernum',
+                            'falernum liqueur'
+                        ], measurement: '' },
+                    { full: 'Peach Syrup', role: 'liqueur', matchKeys: ['peach syrup', 'peach'],
+                        measurement: '' },
+                    { full: 'Chilli Syrup', role: 'liqueur', matchKeys: ['chilli syrup',
+                            'chili syrup', 'jalapeño syrup', 'spicy syrup'
+                        ], measurement: '' },
+                    { full: 'Pineapple Juice', role: 'mixer', matchKeys: ['pineapple juice',
+                            'pineapple'
+                        ], measurement: '' }
+                ]
+            }, {
+                name: 'Long Island',
+                category: 'Fruity & Refreshing',
+                glassware: '',
+                garnish: '',
+                ingredients: [
+                    { full: 'Absolut Vodka', role: 'spirit', matchKeys: ['vodka', 'absolut vodka',
+                            'absolut'
+                        ], measurement: '10ml' },
+                    { full: 'Havana 3-Year-Old Rum', role: 'spirit', matchKeys: ['havana rum',
+                            'havana 3 year old', 'white rum', 'havana club'
+                        ], measurement: '10ml' },
+                    { full: 'Cointreau/Tripple Sec', role: 'liqueur', matchKeys: ['cointreau', 'triple sec',
+                            'orange liqueur'
+                        ], measurement: '10ml' },
+                    { full: 'Beefeater Gin', role: 'spirit', matchKeys: ['gin', 'beefeater gin',
+                            'beefeater'
+                        ], measurement: '10ml' },
+                    { full: 'Olmeca Silver Tequila', role: 'spirit', matchKeys: ['silver tequila',
+                            'olmeca tequila', 'olmeca silver', 'tequila'
+                        ], measurement: '10ml' },
+                    { full: 'Sugar Syrup', role: 'liqueur', matchKeys: ['sugar syrup', 'simple syrup'],
+                        measurement: '25ml' },
+                    { full: 'Lime Juice', role: 'mixer', matchKeys: ['lime juice', 'lime'],
+                        measurement: '25ml' },
+                    { full: 'Cola', role: 'mixer', matchKeys: ['cola', 'coke', 'coca cola',
+                            'coca-cola'
+                        ], measurement: 'top' }
+                ]
+            }, {
+                name: 'Tony Collins',
+                category: 'Fruity & Refreshing',
+                glassware: '',
+                garnish: '',
+                ingredients: [
+                    { full: 'Beefeater Pink Gin', role: 'spirit', matchKeys: ['pink gin',
+                            'beefeater pink gin', 'beefeater pink'
+                        ], measurement: '' },
+                    { full: 'Beefeater Blood Orange Gin', role: 'spirit', matchKeys: [
+                            'blood orange gin', 'beefeater blood orange gin',
+                            'beefeater blood orange'
+                        ], measurement: '' },
+                    { full: 'Lemon Juice', role: 'mixer', matchKeys: ['lemon juice', 'lemon'],
+                        measurement: '' },
+                    { full: 'Cranberry Juice', role: 'mixer', matchKeys: ['cranberry juice',
+                            'cranberry'
+                        ], measurement: '' },
+                    { full: 'Sugar Syrup', role: 'liqueur', matchKeys: ['sugar syrup', 'simple syrup'],
+                        measurement: '' },
+                    { full: 'Soda Water', role: 'mixer', matchKeys: ['soda water', 'soda',
+                            'sparkling water', 'club soda'
+                        ], measurement: '' }
+                ]
+            }, {
+                name: 'Old Fashioned',
+                category: 'Stirred & Spirit-Forward',
+                glassware: '',
+                garnish: '',
+                ingredients: [
+                    { full: 'Woodford Reserve Bourbon', role: 'spirit', matchKeys: ['bourbon',
+                            'woodford reserve', 'woodford reserve bourbon', 'woodford'
+                        ], measurement: '' },
+                    { full: 'Sugar Syrup', role: 'liqueur', matchKeys: ['sugar syrup', 'simple syrup'],
+                        measurement: '' },
+                    { full: 'Angostura Bitters', role: 'liqueur', matchKeys: ['angostura bitters',
+                            'angostura'
+                        ], measurement: '' },
+                    { full: 'Orange Bitters', role: 'liqueur', matchKeys: ['orange bitters'],
+                        measurement: '' }
+                ]
+            }];
+
+            // ─────────────────────────────────────
+            // PERSISTENCE HELPERS (unchanged)
+            // ─────────────────────────────────────
+            function loadMeasurements() {
+                try { return JSON.parse(localStorage.getItem('cocktailMeasurements')) || {}; } catch (e) { return {}; }
+            }
+
+            function saveMeasurements(map) {
+                try { localStorage.setItem('cocktailMeasurements', JSON.stringify(map)); } catch (e) {}
+            }
+
+            function loadMods() {
+                try { return JSON.parse(localStorage.getItem('cocktailMods')) || {}; } catch (e) { return {}; }
+            }
+
+            function saveMods(mods) {
+                try { localStorage.setItem('cocktailMods', JSON.stringify(mods)); } catch (e) {}
+            }
+
+            function loadCustomCocktails() {
+                try { return JSON.parse(localStorage.getItem('customCocktails')) || []; } catch (e) { return []; }
+            }
+
+            function saveCustomCocktails(custom) {
+                try { localStorage.setItem('customCocktails', JSON.stringify(custom)); } catch (e) {}
+            }
+
+            function loadFocusSet() {
+                try { const arr = JSON.parse(localStorage.getItem('cocktailFocus')) || []; return new Set(arr); } catch (
+                e) { return new Set(); }
+            }
+
+            function saveFocusSet(set) {
+                try { localStorage.setItem('cocktailFocus', JSON.stringify([...set])); } catch (e) {}
+            }
+
+            function loadProgress() {
+                try { return JSON.parse(localStorage.getItem('cocktailTrainerProgressV2')) || {}; } catch (e) { return {}; }
+            }
+
+            function saveProgress(p) {
+                try { localStorage.setItem('cocktailTrainerProgressV2', JSON.stringify(p)); } catch (e) {}
+            }
+
+            // ─────────────────────────────────────
+            // HELPERS
+            // ─────────────────────────────────────
+            function generateMatchKeys(name) {
+                const s = name.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
+                const parts = s.split(/\s+/);
+                const keys = new Set();
+                keys.add(s);
+                for (let i = 0; i < parts.length; i++) {
+                    for (let j = i + 1; j <= parts.length; j++) {
+                        const phrase = parts.slice(i, j).join(' ');
+                        if (phrase.length > 2) keys.add(phrase);
+                    }
+                }
+                parts.forEach(p => { if (p.length > 2) keys.add(p); });
+                return [...keys];
+            }
+
+            function norm(s) { return (s || '').toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ').trim(); }
+
+            function ingMatch(user, keys) {
+                const u = norm(user);
+                if (u.length < 2) return false;
+                for (const k of keys) {
+                    const nk = norm(k);
+                    if (u === nk || u.includes(nk) || nk.includes(u)) return true;
+                }
+                return false;
+            }
+
+            function shuffle(a) { const b = [...a]; for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math
+                        .random() * (i + 1));
+                    [b[i], b[j]] = [b[j], b[i]]; } return b; }
+
+            function escapeHTML(s) { const d = document.createElement('div');
+                d.textContent = s; return d.innerHTML; }
+
+            // ── garnish helpers ──
+            function splitGarnish(s) {
+                if (!s) return [];
+                const parts = s.split(/\s*,\s*|\s+and\s+/i).map(p => p.trim()).filter(p => p.length > 0);
+                return parts;
+            }
+
+            function garnishSet(s) {
+                const items = splitGarnish(s);
+                return new Set(items.map(norm));
+            }
+
+            // ─────────────────────────────────────
+            // BUILD COCKTAIL LIST (base + mods + custom)
+            // ─────────────────────────────────────
+            let focusSet = loadFocusSet();
+
+            function buildCocktails() {
+                const measMap = loadMeasurements();
+                const mods = loadMods();
+                const custom = loadCustomCocktails();
+
+                const result = baseCocktails.map(c => {
+                    const mod = mods[c.name] || {};
+                    const deleted = new Set(mod.deleted || []);
+                    let ingredients = c.ingredients.filter(i => !deleted.has(i.full));
+                    const added = (mod.added || []).map(a => ({
+                        ...a,
+                        matchKeys: a.matchKeys || generateMatchKeys(a.full),
+                        measurement: measMap[c.name + '||' + a.full] || a.measurement || ''
+                    }));
+                    ingredients = [...ingredients, ...added];
+                    ingredients = ingredients.map(i => ({
+                        ...i,
+                        measurement: measMap[c.name + '||' + i.full] || i.measurement || ''
+                    }));
+                    return {
+                        ...c,
+                        ingredients,
+                        focus: focusSet.has(c.name),
+                        _custom: false,
+                    };
+                });
+
+                custom.forEach(c => {
+                    const ingredients = c.ingredients.map(i => ({
+                        ...i,
+                        matchKeys: i.matchKeys || generateMatchKeys(i.full),
+                        measurement: measMap[c.name + '||' + i.full] || i.measurement || ''
+                    }));
+                    result.push({
+                        name: c.name,
+                        category: c.category || 'Uncategorized',
+                        glassware: c.glassware || '',
+                        garnish: c.garnish || '',
+                        ingredients,
+                        focus: focusSet.has(c.name),
+                        _custom: true
+                    });
+                });
+
+                return result;
+            }
+
+            let cocktails = buildCocktails();
+
+            // ─────────────────────────────────────
+            // APP STATE
+            // ─────────────────────────────────────
+            let currentCategory = 'all';
+            let currentLevel = 1;
+            let currentDrinkIndex = -1;
+            let isRevealed = false;
+            let filteredDrinks = [...cocktails];
+            let l3HintsVisible = true;
+            let l4HintsVisible = true;
+
+            function getProgress(drinkName, level) {
+                const key = drinkName + '||' + level;
+                const p = loadProgress();
+                return p[key] || { correct: 0, attempts: 0 };
+            }
+
+            function recordAttempt(drinkName, level, correct) {
+                const key = drinkName + '||' + level;
+                const p = loadProgress();
+                const cur = p[key] || { correct: 0, attempts: 0 };
+                cur.attempts++;
+                if (correct) cur.correct++;
+                p[key] = cur;
+                saveProgress(p);
+            }
+
+            function getPct(drinkName, level) {
+                const p = getProgress(drinkName, level);
+                if (p.attempts === 0) return null;
+                return Math.round((p.correct / p.attempts) * 100);
+            }
+
+            function updateFilteredDrinks() {
+                if (currentCategory === 'focus') {
+                    filteredDrinks = cocktails.filter(c => c.focus);
+                } else if (currentCategory === 'all') {
+                    filteredDrinks = [...cocktails];
+                } else {
+                    filteredDrinks = cocktails.filter(c => c.category === currentCategory);
+                }
+                updateCategoryPills();
+            }
+
+            function updateCategoryPills() {
+                const pills = document.querySelectorAll('.cat-pill');
+                const counts = {};
+                cocktails.forEach(c => { counts[c.category] = (counts[c.category] || 0) + 1; });
+                counts['all'] = cocktails.length;
+                counts['focus'] = cocktails.filter(c => c.focus).length;
+                pills.forEach(pill => {
+                    const cat = pill.dataset.cat;
+                    const count = counts[cat] !== undefined ? counts[cat] : 0;
+                    if (cat === 'focus') {
+                        pill.textContent = `🎯 Focus (${count})`;
+                    } else if (cat === 'all') {
+                        pill.textContent = `All (${count})`;
+                    } else {
+                        const display = cat === 'Creamy & Dessert' ? 'Creamy' :
+                            cat === 'Egg White Sours' ? 'Egg White' :
+                            cat === 'Fruity & Refreshing' ? 'Fruity' :
+                            cat === 'Stirred & Spirit-Forward' ? 'Stirred' :
+                            cat;
+                        pill.textContent = `${display} (${count})`;
+                    }
+                });
+            }
+
+            // ─────────────────────────────────────
+            // DOM REFS
+            // ─────────────────────────────────────
+            const $ = id => document.getElementById(id);
+            const catBar = $('categoryBar');
+            const diffBar = $('diffBar');
+            const drinkName = $('drinkName');
+            const ingCount = $('ingCount');
+            const hintText = $('hintText');
+            const quizContent = $('quizContent');
+            const resultBanner = $('resultBanner');
+            const btnSubmit = $('btnSubmit');
+            const btnSkip = $('btnSkip');
+            const btnNext = $('btnNext');
+            const progressGrid = $('progressGrid');
+            const progressLevelLabel = $('progressLevelLabel');
+            const cheatSheet = $('cheatSheet');
+            const cheatToggle = $('cheatToggle');
+            const settingsModal = $('settingsModal');
+            const settingsContent = $('settingsContent');
+            const l3HintToggle = $('l3HintToggle');
+            const l3ToggleBtn = $('l3ToggleBtn');
+            const l4HintToggle = $('l4HintToggle');
+            const l4ToggleBtn = $('l4ToggleBtn');
+
+            // ─────────────────────────────────────
+            // QUIZ LOGIC
+            // ─────────────────────────────────────
+            function pickDrink() {
+                if (filteredDrinks.length === 0) {
+                    updateFilteredDrinks();
+                }
+                if (filteredDrinks.length === 0) {
+                    alert('No cocktails in this category. Please add some to Focus in Settings.');
+                    currentCategory = 'all';
+                    document.querySelector('.cat-pill[data-cat="all"]').classList.add('active');
+                    updateFilteredDrinks();
+                }
+                const idx = Math.floor(Math.random() * filteredDrinks.length);
+                currentDrinkIndex = idx;
+                isRevealed = false;
+                return filteredDrinks[idx];
+            }
+
+            function loadDrink() {
+                const drink = pickDrink();
+                drinkName.textContent = drink.name;
+                ingCount.textContent = drink.ingredients.length + ' ingredients';
+                resultBanner.innerHTML = '';
+                btnSubmit.style.display = '';
+                btnSkip.style.display = '';
+                btnNext.style.display = 'none';
+                btnSubmit.disabled = false;
+                btnSkip.disabled = false;
+                isRevealed = false;
+                renderLevel(drink);
+                if (currentLevel === 3) {
+                    l3HintToggle.style.display = 'block';
+                    l3ToggleBtn.textContent = l3HintsVisible ? '👁️ Hide hints' : '👁️ Show hints';
+                    l4HintToggle.style.display = 'none';
+                } else if (currentLevel === 4) {
+                    l4HintToggle.style.display = 'block';
+                    l4ToggleBtn.textContent = l4HintsVisible ? '👁️ Hide ingredient count' :
+                    '👁️ Show ingredient count';
+                    l3HintToggle.style.display = 'none';
+                } else {
+                    l3HintToggle.style.display = 'none';
+                    l4HintToggle.style.display = 'none';
+                }
+            }
+
+            function resetQuiz() {
+                currentDrinkIndex = -1;
+                isRevealed = false;
+                resultBanner.innerHTML = '';
+                btnSubmit.style.display = '';
+                btnSkip.style.display = '';
+                btnNext.style.display = 'none';
+                btnSubmit.disabled = false;
+                btnSkip.disabled = false;
+                loadDrink();
+            }
+
+            // ── collect all distinct glassware & garnish for option pools ──
+            function getAllGlassware() {
+                const set = new Set();
+                cocktails.forEach(c => { if (c.glassware) set.add(c.glassware); });
+                set.add('Slims');
+                set.add('Stackers');
+                return [...set].sort();
+            }
+
+            function getAllGarnishItems() {
+                const set = new Set();
+                cocktails.forEach(c => {
+                    if (c.garnish) {
+                        const items = splitGarnish(c.garnish);
+                        items.forEach(i => set.add(i));
+                    }
+                });
+                return [...set].sort();
+            }
+
+            function renderLevel(drink) {
+                hintText.textContent = '';
+                if (currentLevel === 1) renderL1(drink);
+                else if (currentLevel === 2) renderL2(drink);
+                else if (currentLevel === 3) renderL3(drink);
+                else if (currentLevel === 4) renderL4(drink);
+            }
+
+            // ── Shared function to build a select row ──
+            function buildSelectRow(options, selectedValues, label) {
+                let html = `<div class="select-row"><div class="label">${label}</div>`;
+                options.forEach(opt => {
+                    const sel = selectedValues.has(opt) ? 'selected' : '';
+                    html += `<span class="chit ${sel}" data-value="${escapeHTML(opt)}">${escapeHTML(opt)}</span>`;
+                });
+                html += '</div>';
+                return html;
+            }
+
+            // ── LEVEL 1 ──
+            function renderL1(drink) {
+                hintText.textContent = 'Tap all correct ingredients, then pick glassware and garnishes.';
+                const correctSet = new Set(drink.ingredients.map(i => i.full));
+                const allIngs = [...new Set(cocktails.flatMap(c => c.ingredients.map(i => i.full)))];
+                const decoys = shuffle(allIngs.filter(i => !correctSet.has(i))).slice(0, Math.min(6, allIngs.length -
+                    correctSet.size));
+                const options = shuffle([...drink.ingredients.map(i => i.full), ...decoys]);
+
+                let html = '<div class="ingredient-grid">';
+                options.forEach(opt => {
+                    html +=
+                        `<span class="ing-chit" data-ing="${escapeHTML(opt)}" data-correct="${correctSet.has(opt)}">${escapeHTML(opt)}</span>`;
+                });
+                html += '</div>';
+
+                const allGlass = getAllGlassware();
+                const correctGlass = drink.glassware ? new Set([drink.glassware]) : new Set();
+                html += buildSelectRow(allGlass, correctGlass, 'Glassware');
+
+                const allGarn = getAllGarnishItems();
+                const correctGarn = garnishSet(drink.garnish);
+                html += buildSelectRow(allGarn, correctGarn, 'Garnish');
+
+                quizContent.innerHTML = html;
+
+                // ingredient chits
+                quizContent.querySelectorAll('.ing-chit').forEach(ch => {
+                    ch.addEventListener('click', () => {
+                        if (isRevealed) return;
+                        ch.classList.toggle('selected');
+                    });
+                });
+
+                // glassware row – single select
+                const glassRows = quizContent.querySelectorAll('.select-row');
+                if (glassRows.length >= 2) {
+                    const glassRow = glassRows[0];
+                    const glassChits = glassRow.querySelectorAll('.chit');
+                    glassChits.forEach(ch => {
+                        ch.addEventListener('click', () => {
+                            if (isRevealed) return;
+                            glassChits.forEach(c => c.classList.remove('selected'));
+                            ch.classList.add('selected');
+                        });
+                    });
+
+                    // garnish row – multi select (toggle)
+                    const garnishRow = glassRows[1];
+                    garnishRow.querySelectorAll('.chit').forEach(ch => {
+                        ch.addEventListener('click', () => {
+                            if (isRevealed) return;
+                            ch.classList.toggle('selected');
+                        });
+                    });
+                }
+            }
+
+            function checkL1(drink) {
+                const correctSet = new Set(drink.ingredients.map(i => i.full));
+                let allOk = true;
+                const selectedOk = new Set();
+                quizContent.querySelectorAll('.ing-chit').forEach(ch => {
+                    const isOk = ch.dataset.correct === 'true';
+                    const sel = ch.classList.contains('selected');
+                    if (sel && isOk) { ch.classList.add('correct-reveal');
+                        selectedOk.add(ch.dataset.ing); } else if (sel && !isOk) { ch.classList.add(
+                            'incorrect-reveal');
+                        allOk = false; } else if (!sel && isOk) { ch.classList.add('missed-reveal');
+                        allOk = false; }
+                });
+                if (selectedOk.size !== correctSet.size) allOk = false;
+
+                const glassRows = quizContent.querySelectorAll('.select-row');
+                let glassOk = true;
+                let garnishOk = true;
+                if (glassRows.length >= 2) {
+                    // glassware
+                    const selectedGlass = [];
+                    glassRows[0].querySelectorAll('.chit').forEach(ch => {
+                        if (ch.classList.contains('selected')) selectedGlass.push(ch.dataset.value);
+                    });
+                    const correctGlass = drink.glassware || '';
+                    const selectedGlassNorm = selectedGlass.map(norm);
+                    const correctGlassNorm = norm(correctGlass);
+                    const glassCorrect = selectedGlassNorm.length === 1 && selectedGlassNorm[0] === correctGlassNorm;
+                    if (!glassCorrect) {
+                        allOk = false;
+                        glassOk = false;
+                        glassRows[0].querySelectorAll('.chit').forEach(ch => {
+                            if (norm(ch.dataset.value) === correctGlassNorm) ch.classList.add('correct-reveal');
+                            else if (ch.classList.contains('selected')) ch.classList.add('incorrect-reveal');
+                        });
+                    } else {
+                        glassRows[0].querySelectorAll('.chit').forEach(ch => {
+                            if (ch.classList.contains('selected')) ch.classList.add('correct-reveal');
+                        });
+                    }
+
+                    // garnish
+                    const selectedGarn = [];
+                    glassRows[1].querySelectorAll('.chit').forEach(ch => {
+                        if (ch.classList.contains('selected')) selectedGarn.push(ch.dataset.value);
+                    });
+                    const correctGarnSet = garnishSet(drink.garnish);
+                    const selectedGarnSet = new Set(selectedGarn.map(norm));
+                    const garnCorrect = selectedGarnSet.size === correctGarnSet.size &&
+                        [...selectedGarnSet].every(v => correctGarnSet.has(v));
+                    if (!garnCorrect) {
+                        allOk = false;
+                        garnishOk = false;
+                        glassRows[1].querySelectorAll('.chit').forEach(ch => {
+                            const val = norm(ch.dataset.value);
+                            if (correctGarnSet.has(val)) {
+                                if (!ch.classList.contains('selected')) ch.classList.add('missed-reveal');
+                                else ch.classList.add('correct-reveal');
+                            } else if (ch.classList.contains('selected')) {
+                                ch.classList.add('incorrect-reveal');
+                            }
+                        });
+                    } else {
+                        glassRows[1].querySelectorAll('.chit').forEach(ch => {
+                            if (ch.classList.contains('selected')) ch.classList.add('correct-reveal');
+                        });
+                    }
+                } else {
+                    allOk = false;
+                }
+
+                const perfect = allOk;
+                const msg = perfect ? '✅ Perfect!' :
+                    (selectedOk.size >= correctSet.size * 0.6 ? '👍 Close!' : '❌ Keep studying.');
+                finishQuiz(drink, perfect, msg);
+            }
+
+            function skipL1(drink) {
+                quizContent.querySelectorAll('.ing-chit').forEach(ch => {
+                    if (ch.dataset.correct === 'true') ch.classList.add('correct-reveal');
+                });
+                const glassRows = quizContent.querySelectorAll('.select-row');
+                if (glassRows.length >= 2) {
+                    const correctGlass = drink.glassware || '';
+                    glassRows[0].querySelectorAll('.chit').forEach(ch => {
+                        if (norm(ch.dataset.value) === norm(correctGlass)) ch.classList.add('correct-reveal');
+                    });
+                    const correctGarnSet = garnishSet(drink.garnish);
+                    glassRows[1].querySelectorAll('.chit').forEach(ch => {
+                        if (correctGarnSet.has(norm(ch.dataset.value))) ch.classList.add('correct-reveal');
+                    });
+                }
+                finishQuiz(drink, false, '📖 Answer revealed.');
+            }
+
+            // ── LEVEL 2 ──
+            function renderL2(drink) {
+                hintText.textContent = 'Select all correct ingredients from the FULL list, plus glassware and garnish.';
+                const correctSet = new Set(drink.ingredients.map(i => i.full));
+                const allIngs = [...new Set(cocktails.flatMap(c => c.ingredients.map(i => i.full)))].sort();
+                let html = '<div class="ingredient-grid all-ingredients">';
+                allIngs.forEach(opt => {
+                    html +=
+                        `<span class="ing-chit" data-ing="${escapeHTML(opt)}" data-correct="${correctSet.has(opt)}">${escapeHTML(opt)}</span>`;
+                });
+                html += '</div>';
+
+                const allGlass = getAllGlassware();
+                const correctGlass = drink.glassware ? new Set([drink.glassware]) : new Set();
+                html += buildSelectRow(allGlass, correctGlass, 'Glassware');
+
+                const allGarn = getAllGarnishItems();
+                const correctGarn = garnishSet(drink.garnish);
+                html += buildSelectRow(allGarn, correctGarn, 'Garnish');
+
+                quizContent.innerHTML = html;
+
+                quizContent.querySelectorAll('.ing-chit').forEach(ch => {
+                    ch.addEventListener('click', () => {
+                        if (isRevealed) return;
+                        ch.classList.toggle('selected');
+                    });
+                });
+
+                const glassRows = quizContent.querySelectorAll('.select-row');
+                if (glassRows.length >= 2) {
+                    const glassRow = glassRows[0];
+                    const glassChits = glassRow.querySelectorAll('.chit');
+                    glassChits.forEach(ch => {
+                        ch.addEventListener('click', () => {
+                            if (isRevealed) return;
+                            glassChits.forEach(c => c.classList.remove('selected'));
+                            ch.classList.add('selected');
+                        });
+                    });
+                    const garnishRow = glassRows[1];
+                    garnishRow.querySelectorAll('.chit').forEach(ch => {
+                        ch.addEventListener('click', () => {
+                            if (isRevealed) return;
+                            ch.classList.toggle('selected');
+                        });
+                    });
+                }
+            }
+
+            function checkL2(drink) { checkL1(drink); }
+
+            function skipL2(drink) { skipL1(drink); }
+
+            // ── LEVEL 3 ──
+            function renderL3(drink) {
+                hintText.textContent = l3HintsVisible ? 'Type ingredients into each category, plus glassware and garnish.' :
+                    'Type ingredients into each category, plus glassware and garnish. (hints hidden)';
+                const roles = { spirit: [], liqueur: [], mixer: [], other: [] };
+                drink.ingredients.forEach(i => roles[i.role].push(i));
+                const labels = { spirit: 'Spirits', liqueur: 'Liqueurs/Syrups', mixer: 'Juices/Mixers',
+                other: 'Other' };
+                let html = '<div class="role-slots">';
+                ['spirit', 'liqueur', 'mixer', 'other'].forEach(role => {
+                    if (roles[role].length === 0) return;
+                    const countDisplay = l3HintsVisible ? ` (${roles[role].length})` : '';
+                    html += `<div class="role-slot"><label>${labels[role]}${countDisplay}</label>
+                        <input type="text" class="role-input" data-role="${role}" placeholder="Type here...">
+                        <div class="role-feedback" data-fb="${role}"></div></div>`;
+                });
+                html += '</div>';
+
+                html += `<div class="extra-fields">
+                    <div class="field"><label>Glassware</label>
+                        <input type="text" id="l3Glassware" placeholder="e.g. Coupe">
+                        <div class="fb" id="l3GlassFb"></div>
+                    </div>
+                    <div class="field"><label>Garnish</label>
+                        <input type="text" id="l3Garnish" placeholder="e.g. lime wheel, mint sprig">
+                        <div class="fb" id="l3GarnishFb"></div>
+                    </div>
+                </div>`;
+
+                quizContent.innerHTML = html;
+
+                if (!l3HintsVisible) {
+                    ingCount.textContent = '🫣 hints hidden';
+                } else {
+                    ingCount.textContent = drink.ingredients.length + ' ingredients';
+                }
+            }
+
+            function checkL3(drink) {
+                const roles = { spirit: [], liqueur: [], mixer: [], other: [] };
+                drink.ingredients.forEach(i => roles[i.role].push(i));
+                let totalOk = 0;
+                const totalExp = drink.ingredients.length;
+                let roleOk = true;
+                quizContent.querySelectorAll('.role-input').forEach(inp => {
+                    const role = inp.dataset.role;
+                    const exp = roles[role] || [];
+                    const parts = inp.value.split(/[,;]+/).map(s => s.trim()).filter(s => s.length > 0);
+                    const used = new Set();
+                    const matched = [];
+                    const extra = [];
+                    parts.forEach(p => {
+                        let found = false;
+                        for (const ing of exp) {
+                            if (used.has(ing.full)) continue;
+                            if (ingMatch(p, ing.matchKeys)) { matched.push(ing);
+                                used.add(ing.full);
+                                found = true; break; }
+                        }
+                        if (!found) extra.push(p);
+                    });
+                    const missed = exp.filter(i => !used.has(i.full));
+                    totalOk += matched.length;
+                    const fb = quizContent.querySelector(`[data-fb="${role}"]`);
+                    fb.innerHTML = (missed.length ? `<span class="missed">Missed: ${missed.map(i=>i.full).join(', ')}</span> ` :
+                        '') +
+                        (extra.length ? `<span class="extra">Extra: ${extra.join(', ')}</span>` : '');
+                    inp.className = 'role-input ' + (missed.length === 0 && extra.length === 0 && matched.length === exp
+                        .length ? 'correct' :
+                        (matched.length >= exp.length * 0.5 ? 'partial' : 'incorrect'));
+                    if (missed.length || extra.length || matched.length !== exp.length) roleOk = false;
+                });
+
+                const glassInput = $('l3Glassware');
+                const glassFb = $('l3GlassFb');
+                const glassVal = norm(glassInput.value);
+                const correctGlass = norm(drink.glassware || '');
+                const glassOk = glassVal === correctGlass && glassVal.length > 0;
+                glassInput.className = glassOk ? 'correct' : (glassVal.length > 0 ? 'incorrect' : '');
+                glassFb.textContent = glassOk ? '' : (glassVal.length > 0 ? '❌ wrong glass' : '⚠️ required');
+
+                const garnInput = $('l3Garnish');
+                const garnFb = $('l3GarnishFb');
+                const garnParts = garnInput.value.split(/[,;]+/).map(s => s.trim()).filter(s => s.length > 0);
+                const userGarnSet = new Set(garnParts.map(norm));
+                const correctGarnSet = garnishSet(drink.garnish);
+                const garnOk = userGarnSet.size === correctGarnSet.size &&
+                    [...userGarnSet].every(v => correctGarnSet.has(v));
+                garnInput.className = garnOk ? 'correct' : (garnParts.length > 0 ? 'incorrect' : '');
+                const missing = [...correctGarnSet].filter(v => !userGarnSet.has(v));
+                const extra = garnParts.filter(p => !correctGarnSet.has(norm(p)));
+                garnFb.textContent = garnOk ? '' :
+                    (missing.length ? `Missing: ${missing.join(', ')}` : '') +
+                    (extra.length ? ` Extra: ${extra.join(', ')}` : '');
+
+                const perfect = roleOk && glassOk && garnOk;
+                const msg = perfect ? '✅ Perfect!' :
+                    (totalOk >= totalExp * 0.6 ? '👍 Close!' : '❌ Keep studying.');
+                finishQuiz(drink, perfect, msg);
+            }
+
+            function skipL3(drink) {
+                const roles = { spirit: [], liqueur: [], mixer: [], other: [] };
+                drink.ingredients.forEach(i => roles[i.role].push(i));
+                quizContent.querySelectorAll('.role-input').forEach(inp => {
+                    const role = inp.dataset.role;
+                    inp.value = (roles[role] || []).map(i => i.full).join(', ');
+                    inp.classList.add('correct');
+                });
+                const glassInput = $('l3Glassware');
+                glassInput.value = drink.glassware || '';
+                glassInput.classList.add('correct');
+                const garnInput = $('l3Garnish');
+                garnInput.value = drink.garnish || '';
+                garnInput.classList.add('correct');
+                finishQuiz(drink, false, '📖 Answer revealed.');
+            }
+
+            function toggleL3Hints() {
+                l3HintsVisible = !l3HintsVisible;
+                l3ToggleBtn.textContent = l3HintsVisible ? '👁️ Hide hints' : '👁️ Show hints';
+                if (currentDrinkIndex >= 0 && filteredDrinks[currentDrinkIndex]) {
+                    const drink = filteredDrinks[currentDrinkIndex];
+                    renderL3(drink);
+                }
+            }
+
+            // ── LEVEL 4 ──
+            function renderL4(drink) {
+                const total = drink.ingredients.length;
+                hintText.textContent = l4HintsVisible ?
+                    `List all ${total} ingredients WITH measurements, plus glassware and garnish.` :
+                    'List all ingredients WITH measurements, plus glassware and garnish. (count hidden)';
+                let html = `<textarea class="blank-input" id="blankInput" placeholder="50ml vanilla vodka, 25ml coffee..."></textarea>`;
+                html += `<div class="extra-fields">
+                    <div class="field"><label>Glassware</label>
+                        <input type="text" id="l4Glassware" placeholder="e.g. Coupe">
+                        <div class="fb" id="l4GlassFb"></div>
+                    </div>
+                    <div class="field"><label>Garnish</label>
+                        <input type="text" id="l4Garnish" placeholder="e.g. lime wheel, mint sprig">
+                        <div class="fb" id="l4GarnishFb"></div>
+                    </div>
+                </div>`;
+                quizContent.innerHTML = html;
+                if (!l4HintsVisible) {
+                    ingCount.textContent = '🫣 count hidden';
+                } else {
+                    ingCount.textContent = total + ' ingredients';
+                }
+            }
+
+            function parsePairs(str) {
+                const parts = str.split(/[,;\n]+/).map(s => s.trim()).filter(s => s.length > 0);
+                return parts.map(p => {
+                    const m = p.match(/^([\d\/.\s]*(?:ml|oz|dash|dashes|barspoon|tsp|tbsp|cup|cl|shot|parts?|to\s+taste)?)\s*(.+)$/i);
+                    if (m && m[1].trim()) return { meas: m[1].trim(), name: m[2].trim(), raw: p };
+                    return { meas: '', name: p, raw: p };
+                });
+            }
+
+            function checkL4(drink) {
+                const ta = $('blankInput');
+                const pairs = parsePairs(ta.value);
+                const used = new Set();
+                const results = [];
+                const matchedNames = [];
+
+                pairs.forEach(pair => {
+                    let best = null;
+                    for (const ing of drink.ingredients) {
+                        if (used.has(ing.full)) continue;
+                        if (ingMatch(pair.name, ing.matchKeys)) {
+                            best = ing;
+                            break;
+                        }
+                    }
+                    if (best) {
+                        used.add(best.full);
+                        const hasMeas = pair.meas && pair.meas.length > 0;
+                        const measOk = hasMeas && norm(pair.meas) === norm(best.measurement);
+                        results.push({
+                            ing: best,
+                            meas: pair.meas,
+                            measOk: measOk,
+                            matched: true,
+                            hasMeas: hasMeas
+                        });
+                        matchedNames.push(best.full);
+                    } else {
+                        results.push({
+                            ing: null,
+                            meas: pair.meas,
+                            raw: pair.raw,
+                            unknown: true,
+                            matched: false
+                        });
+                    }
+                });
+
+                const missed = drink.ingredients.filter(i => !used.has(i.full));
+                const allFound = missed.length === 0 && !results.some(r => r.unknown);
+                const allMeasOk = results.every(r => r.matched ? (r.hasMeas && r.measOk) : true);
+                const ingredientsPerfect = allFound && allMeasOk;
+
+                const glassInput = $('l4Glassware');
+                const glassFb = $('l4GlassFb');
+                const glassVal = norm(glassInput.value);
+                const correctGlass = norm(drink.glassware || '');
+                const glassOk = glassVal === correctGlass && glassVal.length > 0;
+                glassInput.className = glassOk ? 'correct' : (glassVal.length > 0 ? 'incorrect' : '');
+                glassFb.textContent = glassOk ? '' : (glassVal.length > 0 ? '❌ wrong glass' : '⚠️ required');
+
+                const garnInput = $('l4Garnish');
+                const garnFb = $('l4GarnishFb');
+                const garnParts = garnInput.value.split(/[,;]+/).map(s => s.trim()).filter(s => s.length > 0);
+                const userGarnSet = new Set(garnParts.map(norm));
+                const correctGarnSet = garnishSet(drink.garnish);
+                const garnOk = userGarnSet.size === correctGarnSet.size &&
+                    [...userGarnSet].every(v => correctGarnSet.has(v));
+                garnInput.className = garnOk ? 'correct' : (garnParts.length > 0 ? 'incorrect' : '');
+                const missingGarn = [...correctGarnSet].filter(v => !userGarnSet.has(v));
+                const extraGarn = garnParts.filter(p => !correctGarnSet.has(norm(p)));
+                garnFb.textContent = garnOk ? '' :
+                    (missingGarn.length ? `Missing: ${missingGarn.join(', ')}` : '') +
+                    (extraGarn.length ? ` Extra: ${extraGarn.join(', ')}` : '');
+
+                const perfect = ingredientsPerfect && glassOk && garnOk;
+
+                let msg = '';
+                if (perfect) {
+                    msg = '✅ Perfect! All ingredients, measurements, glassware and garnish correct.';
+                } else {
+                    let feedbackParts = [];
+                    if (missed.length) {
+                        feedbackParts.push('❌ Missing ingredients: ' + missed.map(i =>
+                            `${i.full} (${i.measurement || 'no meas'})`).join(', '));
+                    }
+                    const badMeas = results.filter(r => r.matched && (!r.hasMeas || !r.measOk));
+                    if (badMeas.length) {
+                        const details = badMeas.map(r => {
+                            if (!r.hasMeas) return `"${r.raw}" → missing measurement (expected "${r.ing.measurement}")`;
+                            return `"${r.raw}" → wrong measurement (expected "${r.ing.measurement}")`;
+                        });
+                        feedbackParts.push('⚠️ Measurement issue: ' + details.join('; '));
+                    }
+                    const unk = results.filter(r => r.unknown);
+                    if (unk.length) {
+                        feedbackParts.push('❓ Unrecognized: ' + unk.map(r => `"${r.raw}"`).join(', '));
+                    }
+                    if (!glassOk) feedbackParts.push('❌ Glassware: expected "' + (drink.glassware || '') + '"');
+                    if (!garnOk) feedbackParts.push('❌ Garnish: expected "' + (drink.garnish || '') + '"');
+                    if (feedbackParts.length === 0) {
+                        feedbackParts.push('Check your answers again.');
+                    }
+                    msg = feedbackParts.join('. ');
+                }
+
+                finishQuiz(drink, perfect, msg);
+                ta.disabled = true;
+            }
+
+            function skipL4(drink) {
+                const ta = $('blankInput');
+                ta.value = drink.ingredients.map(i => (i.measurement ? i.measurement + ' ' : '') + i.full).join(', ');
+                ta.disabled = true;
+                const glassInput = $('l4Glassware');
+                glassInput.value = drink.glassware || '';
+                glassInput.classList.add('correct');
+                const garnInput = $('l4Garnish');
+                garnInput.value = drink.garnish || '';
+                garnInput.classList.add('correct');
+                finishQuiz(drink, false, '📖 Answer revealed.');
+            }
+
+            function toggleL4Hints() {
+                l4HintsVisible = !l4HintsVisible;
+                l4ToggleBtn.textContent = l4HintsVisible ? '👁️ Hide ingredient count' :
+                    '👁️ Show ingredient count';
+                if (currentDrinkIndex >= 0 && filteredDrinks[currentDrinkIndex]) {
+                    const drink = filteredDrinks[currentDrinkIndex];
+                    renderL4(drink);
+                }
+            }
+
+            // ── FINISH ──
+            function finishQuiz(drink, correct, msg) {
+                isRevealed = true;
+                btnSubmit.style.display = 'none';
+                btnSkip.style.display = 'none';
+                btnNext.style.display = '';
+                recordAttempt(drink.name, currentLevel, correct);
+                resultBanner.innerHTML =
+                    `<div class="result-banner ${correct?'perfect':(msg.includes('Close')||msg.includes('correct')?'good':'poor')}">${msg}</div>`;
+                updateProgress();
+            }
+
+            // ─────────────────────────────────────
+            // PROGRESS
+            // ─────────────────────────────────────
+            function updateProgress() {
+                progressLevelLabel.textContent = currentLevel;
+                const drinks = currentCategory === 'all' ? [...cocktails] : cocktails.filter(c => {
+                    if (currentCategory === 'focus') return c.focus;
+                    return c.category === currentCategory;
+                });
+                let html = '';
+                drinks.forEach(d => {
+                    const pct = getPct(d.name, currentLevel);
+                    const w = pct !== null ? pct : 0;
+                    const cls = pct !== null ? (pct >= 80 ? 'high' : (pct >= 50 ? 'mid' : 'low')) : 'low';
+                    html += `<div class="progress-item"><span class="p-name">${escapeHTML(d.name)}</span>
+                        <div class="progress-bar-mini"><div class="fill ${cls}" style="width:${w}%"></div></div>
+                        <span class="pct">${pct !== null ? pct+'%' : '--'}</span></div>`;
+                });
+                progressGrid.innerHTML = html || '<div style="text-align:center;color:var(--text-dim);">No drinks.</div>';
+            }
+
+            // ─────────────────────────────────────
+            // CHEAT SHEET
+            // ─────────────────────────────────────
+            function buildCheatSheet() {
+                const grouped = {};
+                cocktails.forEach(c => {
+                    if (!grouped[c.category]) grouped[c.category] = [];
+                    grouped[c.category].push(c);
+                });
+                let html = '<h3>📋 Full Menu</h3>';
+                for (const [cat, drinks] of Object.entries(grouped)) {
+                    html += `<h4 style="color:var(--gold);margin-top:10px;">${cat}</h4>`;
+                    drinks.forEach(d => {
+                        const focusMark = d.focus ? ' 🎯' : '';
+                        const customMark = d._custom ? ' ✨' : '';
+                        const glass = d.glassware ? ' | 🍸 ' + d.glassware : '';
+                        const garn = d.garnish ? ' | 🌿 ' + d.garnish : '';
+                        html += `<div class="cheat-drink"><div class="cd-name">${escapeHTML(d.name)}${focusMark}${customMark}${glass}${garn}</div>
+                            <div class="cd-ingredients">${d.ingredients.map(i=>(i.measurement?i.measurement+' ':'')+i.full).join(' · ')}</div></div>`;
+                    });
+                }
+                cheatSheet.innerHTML = html;
+            }
+
+            // ─────────────────────────────────────
+            // SETTINGS MODAL (unchanged)
+            // ─────────────────────────────────────
+            function openSettings() {
+                const grouped = {};
+                cocktails.forEach(c => {
+                    if (!grouped[c.category]) grouped[c.category] = [];
+                    grouped[c.category].push(c);
+                });
+                let html = '<h2>⚙️ Measurements, Ingredients & Focus <button class="modal-close" id="closeSettingsBtn">&times;</button></h2>';
+                html +=
+                    '<p style="color:var(--text-dim);margin-bottom:10px;font-size:0.8rem;">Edit measurements, delete or add ingredients, and toggle Focus. Custom cocktails appear at the bottom.</p>';
+
+                for (const [cat, drinks] of Object.entries(grouped)) {
+                    html += `<h3 style="color:var(--gold);margin-top:12px;font-size:0.9rem;">${cat}</h3>`;
+                    drinks.forEach(d => {
+                        const isCustom = d._custom || false;
+                        html += `<div class="settings-drink" data-drink="${escapeHTML(d.name)}"><h4>
+                            <input type="checkbox" class="focus-checkbox" data-drink="${escapeHTML(d.name)}" ${d.focus ? 'checked' : ''}>
+                            ${escapeHTML(d.name)}${isCustom ? ' ✨' : ''}
+                            ${isCustom ? `<span style="font-size:0.65rem;color:var(--text-dim);font-weight:400;margin-left:6px;">(custom)</span>` : ''}
+                        </h4>`;
+
+                        d.ingredients.forEach(ing => {
+                            html += `<div class="settings-ingredient">
+                                <label>${escapeHTML(ing.full)}</label>
+                                <span class="role-badge">${ing.role}</span>
+                                <input type="text" class="meas-input" data-drink="${escapeHTML(d.name)}" data-ing="${escapeHTML(ing.full)}" value="${escapeHTML(ing.measurement||'')}" placeholder="meas">
+                                ${!isCustom ? `<button class="del-ing-btn" data-drink="${escapeHTML(d.name)}" data-ing="${escapeHTML(ing.full)}">✕</button>` : ''}
+                            </div>`;
+                        });
+
+                        html += `<div class="add-ing-form">
+                            <input type="text" class="add-ing-name" placeholder="Ingredient name" style="flex:2;min-width:80px;">
+                            <select class="add-ing-role" style="flex:1;min-width:60px;">
+                                <option value="spirit">spirit</option>
+                                <option value="liqueur">liqueur</option>
+                                <option value="mixer">mixer</option>
+                                <option value="other">other</option>
+                            </select>
+                            <input type="text" class="add-ing-meas" placeholder="meas" style="flex:1;min-width:50px;">
+                            <button class="add-ing-btn" data-drink="${escapeHTML(d.name)}">+ Add</button>
+                        </div>`;
+
+                        html += '</div>';
+                    });
+                }
+
+                html += `<div class="new-cocktail-section">
+                    <h3>➕ Add New Cocktail</h3>
+                    <div class="field-row">
+                        <input type="text" id="newCocktailName" placeholder="Cocktail name" style="flex:2;">
+                        <input type="text" id="newCocktailCategory" placeholder="Category (e.g. Fruity & Refreshing)" style="flex:1.5;">
+                    </div>
+                    <div id="newIngredientList">
+                        <div class="new-ing-row">
+                            <input type="text" class="new-ing-name" placeholder="Ingredient name" style="flex:2;">
+                            <select class="new-ing-role" style="flex:1;min-width:60px;">
+                                <option value="spirit">spirit</option>
+                                <option value="liqueur">liqueur</option>
+                                <option value="mixer">mixer</option>
+                                <option value="other">other</option>
+                            </select>
+                            <input type="text" class="new-ing-meas" placeholder="meas" style="flex:1;min-width:50px;">
+                            <button class="del-new-ing">✕</button>
+                        </div>
+                    </div>
+                    <button class="add-row-btn" id="addNewIngRow">+ Add ingredient</button>
+                    <div style="margin-top:8px;">
+                        <button class="save-cocktail-btn" id="saveNewCocktailBtn">💾 Save Cocktail</button>
+                    </div>
+                </div>`;
+
+                html += '<button class="save-settings-btn" id="saveSettingsBtn">💾 Save All & Close</button>';
+                settingsContent.innerHTML = html;
+                settingsModal.classList.add('open');
+
+                $('closeSettingsBtn').addEventListener('click', () => settingsModal.classList.remove('open'));
+
+                settingsContent.querySelectorAll('.del-ing-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const drinkName = this.dataset.drink;
+                        const ingName = this.dataset.ing;
+                        if (confirm(`Delete "${ingName}" from "${drinkName}"?`)) {
+                            const mods = loadMods();
+                            if (!mods[drinkName]) mods[drinkName] = { deleted: [], added: [] };
+                            if (!mods[drinkName].deleted) mods[drinkName].deleted = [];
+                            if (!mods[drinkName].deleted.includes(ingName)) {
+                                mods[drinkName].deleted.push(ingName);
+                            }
+                            saveMods(mods);
+                            cocktails = buildCocktails();
+                            updateFilteredDrinks();
+                            buildCheatSheet();
+                            openSettings();
+                            updateProgress();
+                            resetQuiz();
+                        }
+                    });
+                });
+
+                settingsContent.querySelectorAll('.add-ing-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const drinkName = this.dataset.drink;
+                        const container = this.closest('.settings-drink');
+                        const nameInput = container.querySelector('.add-ing-name');
+                        const roleSelect = container.querySelector('.add-ing-role');
+                        const measInput = container.querySelector('.add-ing-meas');
+                        const name = nameInput.value.trim();
+                        const role = roleSelect.value;
+                        const measurement = measInput.value.trim();
+                        if (!name) { alert('Please enter an ingredient name.'); return; }
+                        const drink = cocktails.find(c => c.name === drinkName);
+                        if (drink && drink.ingredients.some(i => i.full.toLowerCase() === name.toLowerCase())) {
+                            alert(`"${name}" already exists in this recipe.`);
+                            return;
+                        }
+                        const mods = loadMods();
+                        if (!mods[drinkName]) mods[drinkName] = { deleted: [], added: [] };
+                        if (!mods[drinkName].added) mods[drinkName].added = [];
+                        mods[drinkName].added.push({
+                            full: name,
+                            role: role,
+                            matchKeys: generateMatchKeys(name),
+                            measurement: measurement
+                        });
+                        saveMods(mods);
+                        cocktails = buildCocktails();
+                        updateFilteredDrinks();
+                        buildCheatSheet();
+                        openSettings();
+                        updateProgress();
+                        resetQuiz();
+                    });
+                });
+
+                $('addNewIngRow').addEventListener('click', function() {
+                    const list = $('newIngredientList');
+                    const row = document.createElement('div');
+                    row.className = 'new-ing-row';
+                    row.innerHTML = `
+                        <input type="text" class="new-ing-name" placeholder="Ingredient name" style="flex:2;">
+                        <select class="new-ing-role" style="flex:1;min-width:60px;">
+                            <option value="spirit">spirit</option>
+                            <option value="liqueur">liqueur</option>
+                            <option value="mixer">mixer</option>
+                            <option value="other">other</option>
+                        </select>
+                        <input type="text" class="new-ing-meas" placeholder="meas" style="flex:1;min-width:50px;">
+                        <button class="del-new-ing">✕</button>
+                    `;
+                    list.appendChild(row);
+                    row.querySelector('.del-new-ing').addEventListener('click', function() {
+                        if (list.children.length > 1) {
+                            row.remove();
+                        } else {
+                            alert('Keep at least one ingredient row.');
+                        }
+                    });
+                });
+
+                settingsContent.querySelectorAll('.new-ing-row .del-new-ing').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const row = this.closest('.new-ing-row');
+                        const list = row.closest('#newIngredientList');
+                        if (list.children.length > 1) {
+                            row.remove();
+                        } else {
+                            alert('Keep at least one ingredient row.');
+                        }
+                    });
+                });
+
+                $('saveNewCocktailBtn').addEventListener('click', function() {
+                    const name = $('newCocktailName').value.trim();
+                    const category = $('newCocktailCategory').value.trim() || 'Uncategorized';
+                    if (!name) { alert('Please enter a cocktail name.'); return; }
+                    if (cocktails.some(c => c.name.toLowerCase() === name.toLowerCase())) {
+                        alert(`A cocktail named "${name}" already exists.`);
+                        return;
+                    }
+                    const rows = document.querySelectorAll('#newIngredientList .new-ing-row');
+                    const ingredients = [];
+                    let hasError = false;
+                    rows.forEach(row => {
+                        const ingName = row.querySelector('.new-ing-name').value.trim();
+                        const role = row.querySelector('.new-ing-role').value;
+                        const measurement = row.querySelector('.new-ing-meas').value.trim();
+                        if (!ingName) { hasError = true; return; }
+                        ingredients.push({
+                            full: ingName,
+                            role: role,
+                            matchKeys: generateMatchKeys(ingName),
+                            measurement: measurement
+                        });
+                    });
+                    if (hasError) { alert('Please fill in all ingredient names.'); return; }
+                    if (ingredients.length === 0) { alert('Add at least one ingredient.'); return; }
+
+                    const custom = loadCustomCocktails();
+                    custom.push({ name, category, glassware: '', garnish: '', ingredients });
+                    saveCustomCocktails(custom);
+                    cocktails = buildCocktails();
+                    updateFilteredDrinks();
+                    buildCheatSheet();
+                    openSettings();
+                    updateProgress();
+                    resetQuiz();
+                    const catPill = document.querySelector(`.cat-pill[data-cat="${category}"]`);
+                    if (catPill) {
+                        catPill.click();
+                    } else {
+                        document.querySelector('.cat-pill[data-cat="all"]').click();
+                    }
+                });
+
+                $('saveSettingsBtn').addEventListener('click', function() {
+                    const measMap = {};
+                    settingsContent.querySelectorAll('.meas-input').forEach(inp => {
+                        const val = inp.value.trim();
+                        if (val) measMap[inp.dataset.drink + '||' + inp.dataset.ing] = val;
+                    });
+                    saveMeasurements(measMap);
+
+                    const newFocus = new Set();
+                    settingsContent.querySelectorAll('.focus-checkbox').forEach(cb => {
+                        if (cb.checked) newFocus.add(cb.dataset.drink);
+                    });
+                    saveFocusSet(newFocus);
+                    focusSet = newFocus;
+
+                    cocktails = buildCocktails();
+                    updateFilteredDrinks();
+                    buildCheatSheet();
+                    settingsModal.classList.remove('open');
+                    updateProgress();
+                    resetQuiz();
+                });
+            }
+
+            // ─────────────────────────────────────
+            // EVENT LISTENERS
+            // ─────────────────────────────────────
+            catBar.addEventListener('click', e => {
+                const pill = e.target.closest('.cat-pill');
+                if (!pill) return;
+                currentCategory = pill.dataset.cat;
+                catBar.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                updateFilteredDrinks();
+                updateProgress();
+                resetQuiz();
+            });
+
+            diffBar.addEventListener('click', e => {
+                const tab = e.target.closest('.diff-tab');
+                if (!tab) return;
+                const level = parseInt(tab.dataset.level);
+                currentLevel = level;
+                diffBar.querySelectorAll('.diff-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                updateProgress();
+                resetQuiz();
+            });
+
+            btnSubmit.addEventListener('click', () => {
+                if (isRevealed || currentDrinkIndex < 0) return;
+                const drink = filteredDrinks[currentDrinkIndex];
+                if (currentLevel === 1) checkL1(drink);
+                else if (currentLevel === 2) checkL2(drink);
+                else if (currentLevel === 3) checkL3(drink);
+                else if (currentLevel === 4) checkL4(drink);
+            });
+
+            btnSkip.addEventListener('click', () => {
+                if (isRevealed || currentDrinkIndex < 0) return;
+                const drink = filteredDrinks[currentDrinkIndex];
+                if (currentLevel === 1) skipL1(drink);
+                else if (currentLevel === 2) skipL2(drink);
+                else if (currentLevel === 3) skipL3(drink);
+                else if (currentLevel === 4) skipL4(drink);
+            });
+
+            btnNext.addEventListener('click', loadDrink);
+
+            l3ToggleBtn.addEventListener('click', toggleL3Hints);
+            l4ToggleBtn.addEventListener('click', toggleL4Hints);
+
+            $('btnResetProgress').addEventListener('click', () => {
+                if (confirm('Reset all progress?')) {
+                    saveProgress({});
+                    updateProgress();
+                    resetQuiz();
+                }
+            });
+
+            cheatToggle.addEventListener('click', () => {
+                cheatSheet.classList.toggle('open');
+                cheatToggle.textContent = cheatSheet.classList.contains('open') ? '📋 Hide Menu ▴' :
+                    '📋 Show Full Menu ▾';
+            });
+
+            $('openSettingsBtn').addEventListener('click', openSettings);
+            settingsModal.addEventListener('click', e => {
+                if (e.target === settingsModal) settingsModal.classList.remove('open');
+            });
+
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Enter' && !isRevealed && currentDrinkIndex >= 0 && document.activeElement?.tagName !==
+                    'TEXTAREA') {
+                    e.preventDefault();
+                    btnSubmit.click();
+                }
+                if ((e.key === 'ArrowRight' || (e.ctrlKey && e.key === 'Enter')) && isRevealed) {
+                    e.preventDefault();
+                    btnNext.click();
+                }
+            });
+
+            // ─────────────────────────────────────
+            // INIT
+            // ─────────────────────────────────────
+            function init() {
+                updateFilteredDrinks();
+                buildCheatSheet();
+                updateProgress();
+                loadDrink();
+                if (currentCategory === 'focus') {
+                    const focusPill = catBar.querySelector('.focus-pill');
+                    if (focusPill) focusPill.classList.add('active');
+                }
+                updateCategoryPills();
+            }
+            init();
+        })();
+    </script>
+</body>
+</html>
