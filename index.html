@@ -2245,7 +2245,7 @@
                     if (glassVal.length === 0) {
                         glassFb.textContent = `Required: "${correctGlass}"`;
                     } else {
-                        glassFb.textContent = `Missing: "${correctGlass}", Extra: "${glassVal}"`;
+                        glassFb.textContent = `Expected: "${correctGlass}", got "${glassVal}"`;
                     }
                 }
 
@@ -2326,7 +2326,8 @@
             function parsePairs(str) {
                 const parts = str.split(/[,;\n]+/).map(s => s.trim()).filter(s => s.length > 0);
                 return parts.map(p => {
-                    const m = p.match(/^([\d\/.\s]*(?:ml|oz|dash|dashes|barspoon|tsp|tbsp|cup|cl|shot|parts?|to\s+taste)?)\s*(.+)$/i);
+                    // FIX: match "top" as a valid measurement unit
+                    const m = p.match(/^([\d\/.\s]*(?:ml|oz|dash|dashes|barspoon|tsp|tbsp|cup|cl|shot|parts?|to\s+taste|top)?)\s*(.+)$/i);
                     if (m && m[1].trim()) return { meas: m[1].trim(), name: m[2].trim(), raw: p };
                     return { meas: '', name: p, raw: p };
                 });
@@ -2388,7 +2389,7 @@
                     if (glassVal.length === 0) {
                         glassFb.textContent = `Required: "${correctGlass}"`;
                     } else {
-                        glassFb.textContent = `Missing: "${correctGlass}", Extra: "${glassVal}"`;
+                        glassFb.textContent = `Expected: "${correctGlass}", got "${glassVal}"`;
                     }
                 }
 
