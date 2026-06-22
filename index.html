@@ -2019,6 +2019,8 @@
                 const glassRows = quizContent.querySelectorAll('.select-row');
                 let glassOk = true;
                 let garnishOk = true;
+                let glassFeedback = '';
+                let garnishFeedback = '';
                 if (glassRows.length >= 2) {
                     const selectedGlass = [];
                     glassRows[0].querySelectorAll('.chit').forEach(ch => {
@@ -2031,11 +2033,14 @@
                     if (!glassCorrect) {
                         allOk = false;
                         glassOk = false;
+                        const selectedStr = selectedGlass.join(', ') || 'nothing';
+                        glassFeedback = `Glassware: expected "${correctGlass}", you selected "${selectedStr}"`;
                         glassRows[0].querySelectorAll('.chit').forEach(ch => {
                             if (norm(ch.dataset.value) === correctGlassNorm) ch.classList.add('correct-reveal');
                             else if (ch.classList.contains('selected')) ch.classList.add('incorrect-reveal');
                         });
                     } else {
+                        glassFeedback = '';
                         glassRows[0].querySelectorAll('.chit').forEach(ch => {
                             if (ch.classList.contains('selected')) ch.classList.add('correct-reveal');
                         });
@@ -2052,6 +2057,12 @@
                     if (!garnCorrect) {
                         allOk = false;
                         garnishOk = false;
+                        const missing = [...correctGarnSet].filter(v => !selectedGarnSet.has(v));
+                        const extra = selectedGarn.filter(p => !correctGarnSet.has(norm(p)));
+                        let parts = [];
+                        if (missing.length) parts.push('Missing: ' + missing.join(', '));
+                        if (extra.length) parts.push('Extra: ' + extra.join(', '));
+                        garnishFeedback = parts.join('; ');
                         glassRows[1].querySelectorAll('.chit').forEach(ch => {
                             const val = norm(ch.dataset.value);
                             if (correctGarnSet.has(val)) {
@@ -2062,6 +2073,7 @@
                             }
                         });
                     } else {
+                        garnishFeedback = '';
                         glassRows[1].querySelectorAll('.chit').forEach(ch => {
                             if (ch.classList.contains('selected')) ch.classList.add('correct-reveal');
                         });
@@ -2071,8 +2083,10 @@
                 }
 
                 const perfect = allOk;
-                const msg = perfect ? '✅ Perfect!' :
+                let msg = perfect ? '✅ Perfect!' :
                     (selectedOk.size >= correctSet.size * 0.6 ? '👍 Close!' : '❌ Keep studying.');
+                if (glassFeedback) msg += ' ' + glassFeedback;
+                if (garnishFeedback) msg += ' ' + garnishFeedback;
                 finishQuiz(drink, perfect, msg);
             }
 
@@ -2221,11 +2235,19 @@
 
                 const glassInput = $('l3Glassware');
                 const glassFb = $('l3GlassFb');
-                const glassVal = norm(glassInput.value);
-                const correctGlass = norm(drink.glassware || '');
-                const glassOk = glassVal === correctGlass && glassVal.length > 0;
+                const glassVal = glassInput.value.trim();
+                const correctGlass = drink.glassware || '';
+                const glassOk = norm(glassVal) === norm(correctGlass) && glassVal.length > 0;
                 glassInput.className = glassOk ? 'correct' : (glassVal.length > 0 ? 'incorrect' : '');
-                glassFb.textContent = glassOk ? '' : (glassVal.length > 0 ? '❌ wrong glass' : '⚠️ required');
+                if (glassOk) {
+                    glassFb.textContent = '';
+                } else {
+                    if (glassVal.length === 0) {
+                        glassFb.textContent = `Required: "${correctGlass}"`;
+                    } else {
+                        glassFb.textContent = `Missing: "${correctGlass}", Extra: "${glassVal}"`;
+                    }
+                }
 
                 const garnInput = $('l3Garnish');
                 const garnFb = $('l3GarnishFb');
@@ -2237,9 +2259,12 @@
                 garnInput.className = garnOk ? 'correct' : (garnParts.length > 0 ? 'incorrect' : '');
                 const missing = [...correctGarnSet].filter(v => !userGarnSet.has(v));
                 const extra = garnParts.filter(p => !correctGarnSet.has(norm(p)));
-                garnFb.textContent = garnOk ? '' :
-                    (missing.length ? `Missing: ${missing.join(', ')}` : '') +
-                    (extra.length ? ` Extra: ${extra.join(', ')}` : '');
+                let garnMsg = '';
+                if (!garnOk) {
+                    if (missing.length) garnMsg += 'Missing: ' + missing.join(', ');
+                    if (extra.length) garnMsg += (garnMsg ? '; ' : '') + 'Extra: ' + extra.join(', ');
+                }
+                garnFb.textContent = garnMsg;
 
                 const perfect = roleOk && glassOk && garnOk;
                 const msg = perfect ? '✅ Perfect!' :
@@ -2353,11 +2378,19 @@
 
                 const glassInput = $('l4Glassware');
                 const glassFb = $('l4GlassFb');
-                const glassVal = norm(glassInput.value);
-                const correctGlass = norm(drink.glassware || '');
-                const glassOk = glassVal === correctGlass && glassVal.length > 0;
+                const glassVal = glassInput.value.trim();
+                const correctGlass = drink.glassware || '';
+                const glassOk = norm(glassVal) === norm(correctGlass) && glassVal.length > 0;
                 glassInput.className = glassOk ? 'correct' : (glassVal.length > 0 ? 'incorrect' : '');
-                glassFb.textContent = glassOk ? '' : (glassVal.length > 0 ? '❌ wrong glass' : '⚠️ required');
+                if (glassOk) {
+                    glassFb.textContent = '';
+                } else {
+                    if (glassVal.length === 0) {
+                        glassFb.textContent = `Required: "${correctGlass}"`;
+                    } else {
+                        glassFb.textContent = `Missing: "${correctGlass}", Extra: "${glassVal}"`;
+                    }
+                }
 
                 const garnInput = $('l4Garnish');
                 const garnFb = $('l4GarnishFb');
@@ -2369,9 +2402,12 @@
                 garnInput.className = garnOk ? 'correct' : (garnParts.length > 0 ? 'incorrect' : '');
                 const missingGarn = [...correctGarnSet].filter(v => !userGarnSet.has(v));
                 const extraGarn = garnParts.filter(p => !correctGarnSet.has(norm(p)));
-                garnFb.textContent = garnOk ? '' :
-                    (missingGarn.length ? `Missing: ${missingGarn.join(', ')}` : '') +
-                    (extraGarn.length ? ` Extra: ${extraGarn.join(', ')}` : '');
+                let garnMsg = '';
+                if (!garnOk) {
+                    if (missingGarn.length) garnMsg += 'Missing: ' + missingGarn.join(', ');
+                    if (extraGarn.length) garnMsg += (garnMsg ? '; ' : '') + 'Extra: ' + extraGarn.join(', ');
+                }
+                garnFb.textContent = garnMsg;
 
                 const perfect = ingredientsPerfect && glassOk && garnOk;
 
@@ -2396,8 +2432,16 @@
                     if (unk.length) {
                         feedbackParts.push('❓ Unrecognized: ' + unk.map(r => `"${r.raw}"`).join(', '));
                     }
-                    if (!glassOk) feedbackParts.push('❌ Glassware: expected "' + (drink.glassware || '') + '"');
-                    if (!garnOk) feedbackParts.push('❌ Garnish: expected "' + (drink.garnish || '') + '"');
+                    if (!glassOk) {
+                        feedbackParts.push(`❌ Glassware: expected "${correctGlass}"`);
+                    }
+                    if (!garnOk) {
+                        if (missingGarn.length || extraGarn.length) {
+                            feedbackParts.push('❌ Garnish: ' + garnMsg);
+                        } else {
+                            feedbackParts.push('❌ Garnish: expected "' + (drink.garnish || '') + '"');
+                        }
+                    }
                     if (feedbackParts.length === 0) {
                         feedbackParts.push('Check your answers again.');
                     }
