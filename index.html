@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     <title>Cocktail Menu Trainer</title>
     <style>
         /* --- all styles unchanged --- */
@@ -799,7 +799,6 @@
             color: var(--gold-light);
         }
 
-        /* new styles for glassware/garnish rows */
         .select-row {
             display: flex;
             flex-wrap: wrap;
@@ -958,6 +957,8 @@
             <button class="cat-pill" data-cat="Egg White Sours">Egg White</button>
             <button class="cat-pill" data-cat="Fruity & Refreshing">Fruity</button>
             <button class="cat-pill" data-cat="Stirred & Spirit-Forward">Stirred</button>
+            <!-- NEW: Pitchers category -->
+            <button class="cat-pill" data-cat="Pitchers">🍺 Pitchers</button>
         </div>
 
         <div class="diff-bar" id="diffBar">
@@ -1005,7 +1006,7 @@
     <script>
         (function() {
             // ─────────────────────────────────────
-            // COCKTAIL DATA – glassware & garnish filled for empty entries
+            // COCKTAIL DATA – with new Pitchers category and recipes
             // ─────────────────────────────────────
             const baseCocktails = [{
                 name: 'White Chocolate Espresso Martini',
@@ -1346,9 +1347,10 @@
                         measurement: '50ml' }
                 ]
             }, {
+                // ── MOVED to Pitchers category ──
                 name: 'Pineapple Daiquiri (Pitcher)',
-                category: 'Fruity & Refreshing',
-                glassware: 'Highball',
+                category: 'Pitchers',
+                glassware: 'Pitcher',
                 garnish: 'Dehydrated Pineapple and Mint Leaf',
                 ingredients: [
                     { full: 'Pineapple Plantation Rum', role: 'spirit', matchKeys: ['plantation rum',
@@ -1609,576 +1611,680 @@
                     { full: 'Orange Bitters', role: 'liqueur', matchKeys: ['orange bitters'],
                         measurement: '' }
                 ]
-            }];
+            },
 
-            // ─────────────────────────────────────
-            // PERSISTENCE HELPERS (unchanged)
-            // ─────────────────────────────────────
-            function loadMeasurements() {
-                try { return JSON.parse(localStorage.getItem('cocktailMeasurements')) || {}; } catch (e) { return {}; }
+            // ─── NEW PITCHER COCKTAILS ───
+
+            {
+                name: 'Class Act (Pitcher)',
+                category: 'Pitchers',
+                glassware: 'Pitcher',
+                garnish: 'Lime Wheel',
+                ingredients: [
+                    { full: 'Absolut Passion Fruit Vodka', role: 'spirit', matchKeys: [
+                            'passion fruit vodka', 'passionfruit vodka', 'absolut passion fruit'
+                        ], measurement: '140ml' },
+                    { full: 'Malibu', role: 'liqueur', matchKeys: ['malibu', 'malibu coconut rum',
+                            'coconut rum'
+                        ], measurement: '60ml' },
+                    { full: 'Watermelon Syrup', role: 'liqueur', matchKeys: ['watermelon syrup',
+                            'watermelon'
+                        ], measurement: '100ml' },
+                    { full: 'Cranberry Juice', role: 'mixer', matchKeys: ['cranberry juice',
+                            'cranberry'
+                        ], measurement: '200ml' },
+                    { full: 'Lime Juice', role: 'mixer', matchKeys: ['lime juice', 'lime'],
+                        measurement: '80ml' },
+                    { full: 'Soda Water', role: 'mixer', matchKeys: ['soda water', 'soda',
+                            'sparkling water', 'club soda'
+                        ], measurement: 'top' }
+                ]
+            }, {
+                name: "How'ya Loveens (Pitcher)",
+                category: 'Pitchers',
+                glassware: 'Pitcher',
+                garnish: 'Lime Wheel and Mint Sprig',
+                ingredients: [
+                    { full: 'Absolut Raspberry Vodka', role: 'spirit', matchKeys: ['raspberry vodka',
+                            'absolut raspberry vodka', 'absolut raspberry'
+                        ], measurement: '200ml' },
+                    { full: 'Lemon Juice', role: 'mixer', matchKeys: ['lemon juice', 'lemon'],
+                        measurement: '100ml' },
+                    { full: 'Cranberry Juice', role: 'mixer', matchKeys: ['cranberry juice',
+                            'cranberry'
+                        ], measurement: '160ml' },
+                    { full: 'Strawberry Syrup', role: 'liqueur', matchKeys: ['strawberry syrup',
+                            'strawberry'
+                        ], measurement: '100ml' },
+                    { full: 'Peach Bitters', role: 'liqueur', matchKeys: ['peach bitters'],
+                        measurement: '8dash' },
+                    { full: 'Soda Water', role: 'mixer', matchKeys: ['soda water', 'soda',
+                            'sparkling water', 'club soda'
+                        ], measurement: 'top' }
+                ]
+            }, {
+                name: 'Tony Collins (Pitcher)',
+                category: 'Pitchers',
+                glassware: 'Pitcher',
+                garnish: 'Lime Wheel',
+                ingredients: [
+                    { full: 'Beefeater Pink Gin', role: 'spirit', matchKeys: ['pink gin',
+                            'beefeater pink gin', 'beefeater pink'
+                        ], measurement: '100ml' },
+                    { full: 'Beefeater Blood Orange Gin', role: 'spirit', matchKeys: [
+                            'blood orange gin', 'beefeater blood orange gin',
+                            'beefeater blood orange'
+                        ], measurement: '100ml' },
+                    { full: 'Lemon Juice', role: 'mixer', matchKeys: ['lemon juice', 'lemon'],
+                        measurement: '100ml' },
+                    { full: 'Cranberry Juice', role: 'mixer', matchKeys: ['cranberry juice',
+                            'cranberry'
+                        ], measurement: '100ml' },
+                    { full: 'Sugar Syrup', role: 'liqueur', matchKeys: ['sugar syrup', 'simple syrup'],
+                        measurement: '60ml' },
+                    { full: 'Soda Water', role: 'mixer', matchKeys: ['soda water', 'soda',
+                            'sparkling water', 'club soda'
+                        ], measurement: 'top' }
+                ]
+            }, {
+                name: 'Long Island (Pitcher)',
+                category: 'Pitchers',
+                glassware: 'Pitcher',
+                garnish: 'Lime Wheel',
+                ingredients: [
+                    { full: 'Absolut Vodka', role: 'spirit', matchKeys: ['vodka', 'absolut vodka',
+                            'absolut'
+                        ], measurement: '40ml' },
+                    { full: 'Havana 3-Year-Old Rum', role: 'spirit', matchKeys: ['havana rum',
+                            'havana 3 year old', 'white rum', 'havana club'
+                        ], measurement: '40ml' },
+                    { full: 'Cointreau/Tripple Sec', role: 'liqueur', matchKeys: ['cointreau', 'triple sec',
+                            'orange liqueur'
+                        ], measurement: '40ml' },
+                    { full: 'Beefeater Gin', role: 'spirit', matchKeys: ['gin', 'beefeater gin',
+                            'beefeater'
+                        ], measurement: '40ml' },
+                    { full: 'Olmeca Silver Tequila', role: 'spirit', matchKeys: ['silver tequila',
+                            'olmeca tequila', 'olmeca silver', 'tequila'
+                        ], measurement: '40ml' },
+                    { full: 'Sugar Syrup', role: 'liqueur', matchKeys: ['sugar syrup', 'simple syrup'],
+                        measurement: '100ml' },
+                    { full: 'Lime Juice', role: 'mixer', matchKeys: ['lime juice', 'lime'],
+                        measurement: '100ml' },
+                    { full: 'Cola', role: 'mixer', matchKeys: ['cola', 'coke', 'coca cola',
+                            'coca-cola'
+                        ], measurement: 'top' }
+                ]
             }
+        ];
 
-            function saveMeasurements(map) {
-                try { localStorage.setItem('cocktailMeasurements', JSON.stringify(map)); } catch (e) {}
-            }
+        // ─────────────────────────────────────
+        // PERSISTENCE HELPERS
+        // ─────────────────────────────────────
+        function loadMeasurements() {
+            try { return JSON.parse(localStorage.getItem('cocktailMeasurements')) || {}; } catch (e) { return {}; }
+        }
 
-            function loadMods() {
-                try { return JSON.parse(localStorage.getItem('cocktailMods')) || {}; } catch (e) { return {}; }
-            }
+        function saveMeasurements(map) {
+            try { localStorage.setItem('cocktailMeasurements', JSON.stringify(map)); } catch (e) {}
+        }
 
-            function saveMods(mods) {
-                try { localStorage.setItem('cocktailMods', JSON.stringify(mods)); } catch (e) {}
-            }
+        function loadMods() {
+            try { return JSON.parse(localStorage.getItem('cocktailMods')) || {}; } catch (e) { return {}; }
+        }
 
-            function loadCustomCocktails() {
-                try { return JSON.parse(localStorage.getItem('customCocktails')) || []; } catch (e) { return []; }
-            }
+        function saveMods(mods) {
+            try { localStorage.setItem('cocktailMods', JSON.stringify(mods)); } catch (e) {}
+        }
 
-            function saveCustomCocktails(custom) {
-                try { localStorage.setItem('customCocktails', JSON.stringify(custom)); } catch (e) {}
-            }
+        function loadCustomCocktails() {
+            try { return JSON.parse(localStorage.getItem('customCocktails')) || []; } catch (e) { return []; }
+        }
 
-            function loadFocusSet() {
-                try { const arr = JSON.parse(localStorage.getItem('cocktailFocus')) || []; return new Set(arr); } catch (
+        function saveCustomCocktails(custom) {
+            try { localStorage.setItem('customCocktails', JSON.stringify(custom)); } catch (e) {}
+        }
+
+        function loadFocusSet() {
+            try { const arr = JSON.parse(localStorage.getItem('cocktailFocus')) || []; return new Set(arr); } catch (
                 e) { return new Set(); }
-            }
+        }
 
-            function saveFocusSet(set) {
-                try { localStorage.setItem('cocktailFocus', JSON.stringify([...set])); } catch (e) {}
-            }
+        function saveFocusSet(set) {
+            try { localStorage.setItem('cocktailFocus', JSON.stringify([...set])); } catch (e) {}
+        }
 
-            function loadProgress() {
-                try { return JSON.parse(localStorage.getItem('cocktailTrainerProgressV2')) || {}; } catch (e) { return {}; }
-            }
+        function loadProgress() {
+            try { return JSON.parse(localStorage.getItem('cocktailTrainerProgressV2')) || {}; } catch (e) { return {}; }
+        }
 
-            function saveProgress(p) {
-                try { localStorage.setItem('cocktailTrainerProgressV2', JSON.stringify(p)); } catch (e) {}
-            }
+        function saveProgress(p) {
+            try { localStorage.setItem('cocktailTrainerProgressV2', JSON.stringify(p)); } catch (e) {}
+        }
 
-            // ─────────────────────────────────────
-            // HELPERS
-            // ─────────────────────────────────────
-            function generateMatchKeys(name) {
-                const s = name.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
-                const parts = s.split(/\s+/);
-                const keys = new Set();
-                keys.add(s);
-                for (let i = 0; i < parts.length; i++) {
-                    for (let j = i + 1; j <= parts.length; j++) {
-                        const phrase = parts.slice(i, j).join(' ');
-                        if (phrase.length > 2) keys.add(phrase);
-                    }
+        // ─────────────────────────────────────
+        // HELPERS
+        // ─────────────────────────────────────
+        function generateMatchKeys(name) {
+            const s = name.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
+            const parts = s.split(/\s+/);
+            const keys = new Set();
+            keys.add(s);
+            for (let i = 0; i < parts.length; i++) {
+                for (let j = i + 1; j <= parts.length; j++) {
+                    const phrase = parts.slice(i, j).join(' ');
+                    if (phrase.length > 2) keys.add(phrase);
                 }
-                parts.forEach(p => { if (p.length > 2) keys.add(p); });
-                return [...keys];
             }
+            parts.forEach(p => { if (p.length > 2) keys.add(p); });
+            return [...keys];
+        }
 
-            function norm(s) { return (s || '').toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ').trim(); }
+        function norm(s) { return (s || '').toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ').trim(); }
 
-            function ingMatch(user, keys) {
-                const u = norm(user);
-                if (u.length < 2) return false;
-                for (const k of keys) {
-                    const nk = norm(k);
-                    if (u === nk || u.includes(nk) || nk.includes(u)) return true;
-                }
-                return false;
+        function ingMatch(user, keys) {
+            const u = norm(user);
+            if (u.length < 2) return false;
+            for (const k of keys) {
+                const nk = norm(k);
+                if (u === nk || u.includes(nk) || nk.includes(u)) return true;
             }
+            return false;
+        }
 
-            function shuffle(a) { const b = [...a]; for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math
-                        .random() * (i + 1));
-                    [b[i], b[j]] = [b[j], b[i]]; } return b; }
+        function shuffle(a) { const b = [...a]; for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math
+                    .random() * (i + 1));
+                [b[i], b[j]] = [b[j], b[i]]; } return b; }
 
-            function escapeHTML(s) { const d = document.createElement('div');
-                d.textContent = s; return d.innerHTML; }
+        function escapeHTML(s) { const d = document.createElement('div');
+            d.textContent = s; return d.innerHTML; }
 
-            // ── garnish helpers ──
-            function splitGarnish(s) {
-                if (!s) return [];
-                const parts = s.split(/\s*,\s*|\s+and\s+/i).map(p => p.trim()).filter(p => p.length > 0);
-                return parts;
-            }
+        function splitGarnish(s) {
+            if (!s) return [];
+            const parts = s.split(/\s*,\s*|\s+and\s+/i).map(p => p.trim()).filter(p => p.length > 0);
+            return parts;
+        }
 
-            function garnishSet(s) {
-                const items = splitGarnish(s);
-                return new Set(items.map(norm));
-            }
+        function garnishSet(s) {
+            const items = splitGarnish(s);
+            return new Set(items.map(norm));
+        }
 
-            // ─────────────────────────────────────
-            // BUILD COCKTAIL LIST (base + mods + custom)
-            // ─────────────────────────────────────
-            let focusSet = loadFocusSet();
+        // ─────────────────────────────────────
+        // BUILD COCKTAIL LIST (base + mods + custom)
+        // ─────────────────────────────────────
+        let focusSet = loadFocusSet();
 
-            function buildCocktails() {
-                const measMap = loadMeasurements();
-                const mods = loadMods();
-                const custom = loadCustomCocktails();
+        function buildCocktails() {
+            const measMap = loadMeasurements();
+            const mods = loadMods();
+            const custom = loadCustomCocktails();
 
-                const result = baseCocktails.map(c => {
-                    const mod = mods[c.name] || {};
-                    const deleted = new Set(mod.deleted || []);
-                    let ingredients = c.ingredients.filter(i => !deleted.has(i.full));
-                    const added = (mod.added || []).map(a => ({
-                        ...a,
-                        matchKeys: a.matchKeys || generateMatchKeys(a.full),
-                        measurement: measMap[c.name + '||' + a.full] || a.measurement || ''
-                    }));
-                    ingredients = [...ingredients, ...added];
-                    ingredients = ingredients.map(i => ({
-                        ...i,
-                        measurement: measMap[c.name + '||' + i.full] || i.measurement || ''
-                    }));
-                    return {
-                        ...c,
-                        ingredients,
-                        focus: focusSet.has(c.name),
-                        _custom: false,
-                    };
+            const result = baseCocktails.map(c => {
+                const mod = mods[c.name] || {};
+                const deleted = new Set(mod.deleted || []);
+                let ingredients = c.ingredients.filter(i => !deleted.has(i.full));
+                const added = (mod.added || []).map(a => ({
+                    ...a,
+                    matchKeys: a.matchKeys || generateMatchKeys(a.full),
+                    measurement: measMap[c.name + '||' + a.full] || a.measurement || ''
+                }));
+                ingredients = [...ingredients, ...added];
+                ingredients = ingredients.map(i => ({
+                    ...i,
+                    measurement: measMap[c.name + '||' + i.full] || i.measurement || ''
+                }));
+                return {
+                    ...c,
+                    ingredients,
+                    focus: focusSet.has(c.name),
+                    _custom: false,
+                };
+            });
+
+            custom.forEach(c => {
+                const ingredients = c.ingredients.map(i => ({
+                    ...i,
+                    matchKeys: i.matchKeys || generateMatchKeys(i.full),
+                    measurement: measMap[c.name + '||' + i.full] || i.measurement || ''
+                }));
+                result.push({
+                    name: c.name,
+                    category: c.category || 'Uncategorized',
+                    glassware: c.glassware || '',
+                    garnish: c.garnish || '',
+                    ingredients,
+                    focus: focusSet.has(c.name),
+                    _custom: true
                 });
+            });
 
-                custom.forEach(c => {
-                    const ingredients = c.ingredients.map(i => ({
-                        ...i,
-                        matchKeys: i.matchKeys || generateMatchKeys(i.full),
-                        measurement: measMap[c.name + '||' + i.full] || i.measurement || ''
-                    }));
-                    result.push({
-                        name: c.name,
-                        category: c.category || 'Uncategorized',
-                        glassware: c.glassware || '',
-                        garnish: c.garnish || '',
-                        ingredients,
-                        focus: focusSet.has(c.name),
-                        _custom: true
+            return result;
+        }
+
+        let cocktails = buildCocktails();
+
+        // ─────────────────────────────────────
+        // APP STATE
+        // ─────────────────────────────────────
+        let currentCategory = 'all';
+        let currentLevel = 1;
+        let currentDrinkIndex = -1;
+        let isRevealed = false;
+        let filteredDrinks = [...cocktails];
+        let l3HintsVisible = true;
+        let l4HintsVisible = true;
+
+        function getProgress(drinkName, level) {
+            const key = drinkName + '||' + level;
+            const p = loadProgress();
+            return p[key] || { correct: 0, attempts: 0 };
+        }
+
+        function recordAttempt(drinkName, level, correct) {
+            const key = drinkName + '||' + level;
+            const p = loadProgress();
+            const cur = p[key] || { correct: 0, attempts: 0 };
+            cur.attempts++;
+            if (correct) cur.correct++;
+            p[key] = cur;
+            saveProgress(p);
+        }
+
+        function getPct(drinkName, level) {
+            const p = getProgress(drinkName, level);
+            if (p.attempts === 0) return null;
+            return Math.round((p.correct / p.attempts) * 100);
+        }
+
+        function updateFilteredDrinks() {
+            if (currentCategory === 'focus') {
+                filteredDrinks = cocktails.filter(c => c.focus);
+            } else if (currentCategory === 'all') {
+                filteredDrinks = [...cocktails];
+            } else {
+                filteredDrinks = cocktails.filter(c => c.category === currentCategory);
+            }
+            updateCategoryPills();
+        }
+
+        function updateCategoryPills() {
+            const pills = document.querySelectorAll('.cat-pill');
+            const counts = {};
+            cocktails.forEach(c => { counts[c.category] = (counts[c.category] || 0) + 1; });
+            counts['all'] = cocktails.length;
+            counts['focus'] = cocktails.filter(c => c.focus).length;
+            pills.forEach(pill => {
+                const cat = pill.dataset.cat;
+                const count = counts[cat] !== undefined ? counts[cat] : 0;
+                if (cat === 'focus') {
+                    pill.textContent = `🎯 Focus (${count})`;
+                } else if (cat === 'all') {
+                    pill.textContent = `All (${count})`;
+                } else if (cat === 'Pitchers') {
+                    pill.textContent = `🍺 Pitchers (${count})`;
+                } else {
+                    const display = cat === 'Creamy & Dessert' ? 'Creamy' :
+                        cat === 'Egg White Sours' ? 'Egg White' :
+                        cat === 'Fruity & Refreshing' ? 'Fruity' :
+                        cat === 'Stirred & Spirit-Forward' ? 'Stirred' :
+                        cat;
+                    pill.textContent = `${display} (${count})`;
+                }
+            });
+        }
+
+        // ─────────────────────────────────────
+        // DOM REFS
+        // ─────────────────────────────────────
+        const $ = id => document.getElementById(id);
+        const catBar = $('categoryBar');
+        const diffBar = $('diffBar');
+        const drinkName = $('drinkName');
+        const ingCount = $('ingCount');
+        const hintText = $('hintText');
+        const quizContent = $('quizContent');
+        const resultBanner = $('resultBanner');
+        const btnSubmit = $('btnSubmit');
+        const btnSkip = $('btnSkip');
+        const btnNext = $('btnNext');
+        const progressGrid = $('progressGrid');
+        const progressLevelLabel = $('progressLevelLabel');
+        const cheatSheet = $('cheatSheet');
+        const cheatToggle = $('cheatToggle');
+        const settingsModal = $('settingsModal');
+        const settingsContent = $('settingsContent');
+        const l3HintToggle = $('l3HintToggle');
+        const l3ToggleBtn = $('l3ToggleBtn');
+        const l4HintToggle = $('l4HintToggle');
+        const l4ToggleBtn = $('l4ToggleBtn');
+
+        // ─────────────────────────────────────
+        // QUIZ LOGIC
+        // ─────────────────────────────────────
+        function pickDrink() {
+            if (filteredDrinks.length === 0) {
+                updateFilteredDrinks();
+            }
+            if (filteredDrinks.length === 0) {
+                alert('No cocktails in this category. Please add some to Focus in Settings.');
+                currentCategory = 'all';
+                document.querySelector('.cat-pill[data-cat="all"]').classList.add('active');
+                updateFilteredDrinks();
+            }
+            const idx = Math.floor(Math.random() * filteredDrinks.length);
+            currentDrinkIndex = idx;
+            isRevealed = false;
+            return filteredDrinks[idx];
+        }
+
+        function loadDrink() {
+            const drink = pickDrink();
+            drinkName.textContent = drink.name;
+            ingCount.textContent = drink.ingredients.length + ' ingredients';
+            resultBanner.innerHTML = '';
+            btnSubmit.style.display = '';
+            btnSkip.style.display = '';
+            btnNext.style.display = 'none';
+            btnSubmit.disabled = false;
+            btnSkip.disabled = false;
+            isRevealed = false;
+            renderLevel(drink);
+            if (currentLevel === 3) {
+                l3HintToggle.style.display = 'block';
+                l3ToggleBtn.textContent = l3HintsVisible ? '👁️ Hide hints' : '👁️ Show hints';
+                l4HintToggle.style.display = 'none';
+            } else if (currentLevel === 4) {
+                l4HintToggle.style.display = 'block';
+                l4ToggleBtn.textContent = l4HintsVisible ? '👁️ Hide ingredient count' :
+                    '👁️ Show ingredient count';
+                l3HintToggle.style.display = 'none';
+            } else {
+                l3HintToggle.style.display = 'none';
+                l4HintToggle.style.display = 'none';
+            }
+        }
+
+        function resetQuiz() {
+            currentDrinkIndex = -1;
+            isRevealed = false;
+            resultBanner.innerHTML = '';
+            btnSubmit.style.display = '';
+            btnSkip.style.display = '';
+            btnNext.style.display = 'none';
+            btnSubmit.disabled = false;
+            btnSkip.disabled = false;
+            loadDrink();
+        }
+
+        function getAllGlassware() {
+            const set = new Set();
+            cocktails.forEach(c => { if (c.glassware) set.add(c.glassware); });
+            set.add('Slims');
+            set.add('Stackers');
+            return [...set].sort();
+        }
+
+        function getAllGarnishItems() {
+            const set = new Set();
+            cocktails.forEach(c => {
+                if (c.garnish) {
+                    const items = splitGarnish(c.garnish);
+                    items.forEach(i => set.add(i));
+                }
+            });
+            return [...set].sort();
+        }
+
+        function renderLevel(drink) {
+            hintText.textContent = '';
+            if (currentLevel === 1) renderL1(drink);
+            else if (currentLevel === 2) renderL2(drink);
+            else if (currentLevel === 3) renderL3(drink);
+            else if (currentLevel === 4) renderL4(drink);
+        }
+
+        function buildSelectRow(options, selectedValues, label) {
+            let html = `<div class="select-row"><div class="label">${label}</div>`;
+            options.forEach(opt => {
+                const sel = selectedValues.has(opt) ? 'selected' : '';
+                html += `<span class="chit ${sel}" data-value="${escapeHTML(opt)}">${escapeHTML(opt)}</span>`;
+            });
+            html += '</div>';
+            return html;
+        }
+
+        // ── LEVEL 1 ──
+        function renderL1(drink) {
+            hintText.textContent = 'Tap all correct ingredients, then pick glassware and garnishes.';
+            const correctSet = new Set(drink.ingredients.map(i => i.full));
+            const allIngs = [...new Set(cocktails.flatMap(c => c.ingredients.map(i => i.full)))];
+            const decoys = shuffle(allIngs.filter(i => !correctSet.has(i))).slice(0, Math.min(6, allIngs.length -
+                correctSet.size));
+            const options = shuffle([...drink.ingredients.map(i => i.full), ...decoys]);
+
+            let html = '<div class="ingredient-grid">';
+            options.forEach(opt => {
+                html +=
+                    `<span class="ing-chit" data-ing="${escapeHTML(opt)}" data-correct="${correctSet.has(opt)}">${escapeHTML(opt)}</span>`;
+            });
+            html += '</div>';
+
+            const allGlass = getAllGlassware();
+            html += buildSelectRow(allGlass, new Set(), 'Glassware');
+
+            const allGarn = getAllGarnishItems();
+            html += buildSelectRow(allGarn, new Set(), 'Garnish');
+
+            quizContent.innerHTML = html;
+
+            quizContent.querySelectorAll('.ing-chit').forEach(ch => {
+                ch.addEventListener('click', () => {
+                    if (isRevealed) return;
+                    ch.classList.toggle('selected');
+                });
+            });
+
+            const glassRows = quizContent.querySelectorAll('.select-row');
+            if (glassRows.length >= 2) {
+                const glassRow = glassRows[0];
+                const glassChits = glassRow.querySelectorAll('.chit');
+                glassChits.forEach(ch => {
+                    ch.addEventListener('click', () => {
+                        if (isRevealed) return;
+                        glassChits.forEach(c => c.classList.remove('selected'));
+                        ch.classList.add('selected');
                     });
                 });
 
-                return result;
-            }
-
-            let cocktails = buildCocktails();
-
-            // ─────────────────────────────────────
-            // APP STATE
-            // ─────────────────────────────────────
-            let currentCategory = 'all';
-            let currentLevel = 1;
-            let currentDrinkIndex = -1;
-            let isRevealed = false;
-            let filteredDrinks = [...cocktails];
-            let l3HintsVisible = true;
-            let l4HintsVisible = true;
-
-            function getProgress(drinkName, level) {
-                const key = drinkName + '||' + level;
-                const p = loadProgress();
-                return p[key] || { correct: 0, attempts: 0 };
-            }
-
-            function recordAttempt(drinkName, level, correct) {
-                const key = drinkName + '||' + level;
-                const p = loadProgress();
-                const cur = p[key] || { correct: 0, attempts: 0 };
-                cur.attempts++;
-                if (correct) cur.correct++;
-                p[key] = cur;
-                saveProgress(p);
-            }
-
-            function getPct(drinkName, level) {
-                const p = getProgress(drinkName, level);
-                if (p.attempts === 0) return null;
-                return Math.round((p.correct / p.attempts) * 100);
-            }
-
-            function updateFilteredDrinks() {
-                if (currentCategory === 'focus') {
-                    filteredDrinks = cocktails.filter(c => c.focus);
-                } else if (currentCategory === 'all') {
-                    filteredDrinks = [...cocktails];
-                } else {
-                    filteredDrinks = cocktails.filter(c => c.category === currentCategory);
-                }
-                updateCategoryPills();
-            }
-
-            function updateCategoryPills() {
-                const pills = document.querySelectorAll('.cat-pill');
-                const counts = {};
-                cocktails.forEach(c => { counts[c.category] = (counts[c.category] || 0) + 1; });
-                counts['all'] = cocktails.length;
-                counts['focus'] = cocktails.filter(c => c.focus).length;
-                pills.forEach(pill => {
-                    const cat = pill.dataset.cat;
-                    const count = counts[cat] !== undefined ? counts[cat] : 0;
-                    if (cat === 'focus') {
-                        pill.textContent = `🎯 Focus (${count})`;
-                    } else if (cat === 'all') {
-                        pill.textContent = `All (${count})`;
-                    } else {
-                        const display = cat === 'Creamy & Dessert' ? 'Creamy' :
-                            cat === 'Egg White Sours' ? 'Egg White' :
-                            cat === 'Fruity & Refreshing' ? 'Fruity' :
-                            cat === 'Stirred & Spirit-Forward' ? 'Stirred' :
-                            cat;
-                        pill.textContent = `${display} (${count})`;
-                    }
-                });
-            }
-
-            // ─────────────────────────────────────
-            // DOM REFS
-            // ─────────────────────────────────────
-            const $ = id => document.getElementById(id);
-            const catBar = $('categoryBar');
-            const diffBar = $('diffBar');
-            const drinkName = $('drinkName');
-            const ingCount = $('ingCount');
-            const hintText = $('hintText');
-            const quizContent = $('quizContent');
-            const resultBanner = $('resultBanner');
-            const btnSubmit = $('btnSubmit');
-            const btnSkip = $('btnSkip');
-            const btnNext = $('btnNext');
-            const progressGrid = $('progressGrid');
-            const progressLevelLabel = $('progressLevelLabel');
-            const cheatSheet = $('cheatSheet');
-            const cheatToggle = $('cheatToggle');
-            const settingsModal = $('settingsModal');
-            const settingsContent = $('settingsContent');
-            const l3HintToggle = $('l3HintToggle');
-            const l3ToggleBtn = $('l3ToggleBtn');
-            const l4HintToggle = $('l4HintToggle');
-            const l4ToggleBtn = $('l4ToggleBtn');
-
-            // ─────────────────────────────────────
-            // QUIZ LOGIC
-            // ─────────────────────────────────────
-            function pickDrink() {
-                if (filteredDrinks.length === 0) {
-                    updateFilteredDrinks();
-                }
-                if (filteredDrinks.length === 0) {
-                    alert('No cocktails in this category. Please add some to Focus in Settings.');
-                    currentCategory = 'all';
-                    document.querySelector('.cat-pill[data-cat="all"]').classList.add('active');
-                    updateFilteredDrinks();
-                }
-                const idx = Math.floor(Math.random() * filteredDrinks.length);
-                currentDrinkIndex = idx;
-                isRevealed = false;
-                return filteredDrinks[idx];
-            }
-
-            function loadDrink() {
-                const drink = pickDrink();
-                drinkName.textContent = drink.name;
-                ingCount.textContent = drink.ingredients.length + ' ingredients';
-                resultBanner.innerHTML = '';
-                btnSubmit.style.display = '';
-                btnSkip.style.display = '';
-                btnNext.style.display = 'none';
-                btnSubmit.disabled = false;
-                btnSkip.disabled = false;
-                isRevealed = false;
-                renderLevel(drink);
-                if (currentLevel === 3) {
-                    l3HintToggle.style.display = 'block';
-                    l3ToggleBtn.textContent = l3HintsVisible ? '👁️ Hide hints' : '👁️ Show hints';
-                    l4HintToggle.style.display = 'none';
-                } else if (currentLevel === 4) {
-                    l4HintToggle.style.display = 'block';
-                    l4ToggleBtn.textContent = l4HintsVisible ? '👁️ Hide ingredient count' :
-                        '👁️ Show ingredient count';
-                    l3HintToggle.style.display = 'none';
-                } else {
-                    l3HintToggle.style.display = 'none';
-                    l4HintToggle.style.display = 'none';
-                }
-            }
-
-            function resetQuiz() {
-                currentDrinkIndex = -1;
-                isRevealed = false;
-                resultBanner.innerHTML = '';
-                btnSubmit.style.display = '';
-                btnSkip.style.display = '';
-                btnNext.style.display = 'none';
-                btnSubmit.disabled = false;
-                btnSkip.disabled = false;
-                loadDrink();
-            }
-
-            // ── collect all distinct glassware & garnish for option pools ──
-            function getAllGlassware() {
-                const set = new Set();
-                cocktails.forEach(c => { if (c.glassware) set.add(c.glassware); });
-                set.add('Slims');
-                set.add('Stackers');
-                return [...set].sort();
-            }
-
-            function getAllGarnishItems() {
-                const set = new Set();
-                cocktails.forEach(c => {
-                    if (c.garnish) {
-                        const items = splitGarnish(c.garnish);
-                        items.forEach(i => set.add(i));
-                    }
-                });
-                return [...set].sort();
-            }
-
-            function renderLevel(drink) {
-                hintText.textContent = '';
-                if (currentLevel === 1) renderL1(drink);
-                else if (currentLevel === 2) renderL2(drink);
-                else if (currentLevel === 3) renderL3(drink);
-                else if (currentLevel === 4) renderL4(drink);
-            }
-
-            // ── Shared function to build a select row ──
-            function buildSelectRow(options, selectedValues, label) {
-                let html = `<div class="select-row"><div class="label">${label}</div>`;
-                options.forEach(opt => {
-                    const sel = selectedValues.has(opt) ? 'selected' : '';
-                    html += `<span class="chit ${sel}" data-value="${escapeHTML(opt)}">${escapeHTML(opt)}</span>`;
-                });
-                html += '</div>';
-                return html;
-            }
-
-            // ── LEVEL 1 ──
-            function renderL1(drink) {
-                hintText.textContent = 'Tap all correct ingredients, then pick glassware and garnishes.';
-                const correctSet = new Set(drink.ingredients.map(i => i.full));
-                const allIngs = [...new Set(cocktails.flatMap(c => c.ingredients.map(i => i.full)))];
-                const decoys = shuffle(allIngs.filter(i => !correctSet.has(i))).slice(0, Math.min(6, allIngs.length -
-                    correctSet.size));
-                const options = shuffle([...drink.ingredients.map(i => i.full), ...decoys]);
-
-                let html = '<div class="ingredient-grid">';
-                options.forEach(opt => {
-                    html +=
-                        `<span class="ing-chit" data-ing="${escapeHTML(opt)}" data-correct="${correctSet.has(opt)}">${escapeHTML(opt)}</span>`;
-                });
-                html += '</div>';
-
-                const allGlass = getAllGlassware();
-                html += buildSelectRow(allGlass, new Set(), 'Glassware');
-
-                const allGarn = getAllGarnishItems();
-                html += buildSelectRow(allGarn, new Set(), 'Garnish');
-
-                quizContent.innerHTML = html;
-
-                quizContent.querySelectorAll('.ing-chit').forEach(ch => {
+                const garnishRow = glassRows[1];
+                garnishRow.querySelectorAll('.chit').forEach(ch => {
                     ch.addEventListener('click', () => {
                         if (isRevealed) return;
                         ch.classList.toggle('selected');
                     });
                 });
-
-                const glassRows = quizContent.querySelectorAll('.select-row');
-                if (glassRows.length >= 2) {
-                    const glassRow = glassRows[0];
-                    const glassChits = glassRow.querySelectorAll('.chit');
-                    glassChits.forEach(ch => {
-                        ch.addEventListener('click', () => {
-                            if (isRevealed) return;
-                            glassChits.forEach(c => c.classList.remove('selected'));
-                            ch.classList.add('selected');
-                        });
-                    });
-
-                    const garnishRow = glassRows[1];
-                    garnishRow.querySelectorAll('.chit').forEach(ch => {
-                        ch.addEventListener('click', () => {
-                            if (isRevealed) return;
-                            ch.classList.toggle('selected');
-                        });
-                    });
-                }
             }
+        }
 
-            function checkL1(drink) {
-                const correctSet = new Set(drink.ingredients.map(i => i.full));
-                let allOk = true;
-                const selectedOk = new Set();
-                quizContent.querySelectorAll('.ing-chit').forEach(ch => {
-                    const isOk = ch.dataset.correct === 'true';
-                    const sel = ch.classList.contains('selected');
-                    if (sel && isOk) { ch.classList.add('correct-reveal');
-                        selectedOk.add(ch.dataset.ing); } else if (sel && !isOk) { ch.classList.add(
-                            'incorrect-reveal');
-                        allOk = false; } else if (!sel && isOk) { ch.classList.add('missed-reveal');
-                        allOk = false; }
+        function checkL1(drink) {
+            const correctSet = new Set(drink.ingredients.map(i => i.full));
+            let allOk = true;
+            const selectedOk = new Set();
+            quizContent.querySelectorAll('.ing-chit').forEach(ch => {
+                const isOk = ch.dataset.correct === 'true';
+                const sel = ch.classList.contains('selected');
+                if (sel && isOk) { ch.classList.add('correct-reveal');
+                    selectedOk.add(ch.dataset.ing); } else if (sel && !isOk) { ch.classList.add(
+                        'incorrect-reveal');
+                    allOk = false; } else if (!sel && isOk) { ch.classList.add('missed-reveal');
+                    allOk = false; }
+            });
+            if (selectedOk.size !== correctSet.size) allOk = false;
+
+            const glassRows = quizContent.querySelectorAll('.select-row');
+            let glassOk = true;
+            let garnishOk = true;
+            let glassFeedback = '';
+            let garnishFeedback = '';
+            if (glassRows.length >= 2) {
+                const selectedGlass = [];
+                glassRows[0].querySelectorAll('.chit').forEach(ch => {
+                    if (ch.classList.contains('selected')) selectedGlass.push(ch.dataset.value);
                 });
-                if (selectedOk.size !== correctSet.size) allOk = false;
-
-                const glassRows = quizContent.querySelectorAll('.select-row');
-                let glassOk = true;
-                let garnishOk = true;
-                let glassFeedback = '';
-                let garnishFeedback = '';
-                if (glassRows.length >= 2) {
-                    const selectedGlass = [];
-                    glassRows[0].querySelectorAll('.chit').forEach(ch => {
-                        if (ch.classList.contains('selected')) selectedGlass.push(ch.dataset.value);
-                    });
-                    const correctGlass = drink.glassware || '';
-                    const selectedGlassNorm = selectedGlass.map(norm);
-                    const correctGlassNorm = norm(correctGlass);
-                    const glassCorrect = selectedGlassNorm.length === 1 && selectedGlassNorm[0] === correctGlassNorm;
-                    if (!glassCorrect) {
-                        allOk = false;
-                        glassOk = false;
-                        const selectedStr = selectedGlass.join(', ') || 'nothing';
-                        glassFeedback = `Glassware: expected "${correctGlass}", you selected "${selectedStr}"`;
-                        glassRows[0].querySelectorAll('.chit').forEach(ch => {
-                            if (norm(ch.dataset.value) === correctGlassNorm) ch.classList.add('correct-reveal');
-                            else if (ch.classList.contains('selected')) ch.classList.add('incorrect-reveal');
-                        });
-                    } else {
-                        glassFeedback = '';
-                        glassRows[0].querySelectorAll('.chit').forEach(ch => {
-                            if (ch.classList.contains('selected')) ch.classList.add('correct-reveal');
-                        });
-                    }
-
-                    const selectedGarn = [];
-                    glassRows[1].querySelectorAll('.chit').forEach(ch => {
-                        if (ch.classList.contains('selected')) selectedGarn.push(ch.dataset.value);
-                    });
-                    const correctGarnSet = garnishSet(drink.garnish);
-                    const selectedGarnSet = new Set(selectedGarn.map(norm));
-                    const garnCorrect = selectedGarnSet.size === correctGarnSet.size &&
-                        [...selectedGarnSet].every(v => correctGarnSet.has(v));
-                    if (!garnCorrect) {
-                        allOk = false;
-                        garnishOk = false;
-                        const missing = [...correctGarnSet].filter(v => !selectedGarnSet.has(v));
-                        const extra = selectedGarn.filter(p => !correctGarnSet.has(norm(p)));
-                        let parts = [];
-                        if (missing.length) parts.push('Missing: ' + missing.join(', '));
-                        if (extra.length) parts.push('Extra: ' + extra.join(', '));
-                        garnishFeedback = parts.join('; ');
-                        glassRows[1].querySelectorAll('.chit').forEach(ch => {
-                            const val = norm(ch.dataset.value);
-                            if (correctGarnSet.has(val)) {
-                                if (!ch.classList.contains('selected')) ch.classList.add('missed-reveal');
-                                else ch.classList.add('correct-reveal');
-                            } else if (ch.classList.contains('selected')) {
-                                ch.classList.add('incorrect-reveal');
-                            }
-                        });
-                    } else {
-                        garnishFeedback = '';
-                        glassRows[1].querySelectorAll('.chit').forEach(ch => {
-                            if (ch.classList.contains('selected')) ch.classList.add('correct-reveal');
-                        });
-                    }
-                } else {
+                const correctGlass = drink.glassware || '';
+                const selectedGlassNorm = selectedGlass.map(norm);
+                const correctGlassNorm = norm(correctGlass);
+                const glassCorrect = selectedGlassNorm.length === 1 && selectedGlassNorm[0] === correctGlassNorm;
+                if (!glassCorrect) {
                     allOk = false;
-                }
-
-                const perfect = allOk;
-                let msg = perfect ? '✅ Perfect!' :
-                    (selectedOk.size >= correctSet.size * 0.6 ? '👍 Close!' : '❌ Keep studying.');
-                if (glassFeedback) msg += ' ' + glassFeedback;
-                if (garnishFeedback) msg += ' ' + garnishFeedback;
-                finishQuiz(drink, perfect, msg);
-            }
-
-            function skipL1(drink) {
-                quizContent.querySelectorAll('.ing-chit').forEach(ch => {
-                    if (ch.dataset.correct === 'true') ch.classList.add('correct-reveal');
-                });
-                const glassRows = quizContent.querySelectorAll('.select-row');
-                if (glassRows.length >= 2) {
-                    const correctGlass = drink.glassware || '';
+                    glassOk = false;
+                    const selectedStr = selectedGlass.join(', ') || 'nothing';
+                    glassFeedback = `Glassware: expected "${correctGlass}", you selected "${selectedStr}"`;
                     glassRows[0].querySelectorAll('.chit').forEach(ch => {
-                        if (norm(ch.dataset.value) === norm(correctGlass)) ch.classList.add('correct-reveal');
+                        if (norm(ch.dataset.value) === correctGlassNorm) ch.classList.add('correct-reveal');
+                        else if (ch.classList.contains('selected')) ch.classList.add('incorrect-reveal');
                     });
-                    const correctGarnSet = garnishSet(drink.garnish);
-                    glassRows[1].querySelectorAll('.chit').forEach(ch => {
-                        if (correctGarnSet.has(norm(ch.dataset.value))) ch.classList.add('correct-reveal');
+                } else {
+                    glassFeedback = '';
+                    glassRows[0].querySelectorAll('.chit').forEach(ch => {
+                        if (ch.classList.contains('selected')) ch.classList.add('correct-reveal');
                     });
                 }
-                finishQuiz(drink, false, '📖 Answer revealed.');
+
+                const selectedGarn = [];
+                glassRows[1].querySelectorAll('.chit').forEach(ch => {
+                    if (ch.classList.contains('selected')) selectedGarn.push(ch.dataset.value);
+                });
+                const correctGarnSet = garnishSet(drink.garnish);
+                const selectedGarnSet = new Set(selectedGarn.map(norm));
+                const garnCorrect = selectedGarnSet.size === correctGarnSet.size &&
+                    [...selectedGarnSet].every(v => correctGarnSet.has(v));
+                if (!garnCorrect) {
+                    allOk = false;
+                    garnishOk = false;
+                    const missing = [...correctGarnSet].filter(v => !selectedGarnSet.has(v));
+                    const extra = selectedGarn.filter(p => !correctGarnSet.has(norm(p)));
+                    let parts = [];
+                    if (missing.length) parts.push('Missing: ' + missing.join(', '));
+                    if (extra.length) parts.push('Extra: ' + extra.join(', '));
+                    garnishFeedback = parts.join('; ');
+                    glassRows[1].querySelectorAll('.chit').forEach(ch => {
+                        const val = norm(ch.dataset.value);
+                        if (correctGarnSet.has(val)) {
+                            if (!ch.classList.contains('selected')) ch.classList.add('missed-reveal');
+                            else ch.classList.add('correct-reveal');
+                        } else if (ch.classList.contains('selected')) {
+                            ch.classList.add('incorrect-reveal');
+                        }
+                    });
+                } else {
+                    garnishFeedback = '';
+                    glassRows[1].querySelectorAll('.chit').forEach(ch => {
+                        if (ch.classList.contains('selected')) ch.classList.add('correct-reveal');
+                    });
+                }
+            } else {
+                allOk = false;
             }
 
-            // ── LEVEL 2 ──
-            function renderL2(drink) {
-                hintText.textContent = 'Select all correct ingredients from the FULL list, plus glassware and garnish.';
-                const correctSet = new Set(drink.ingredients.map(i => i.full));
-                const allIngs = [...new Set(cocktails.flatMap(c => c.ingredients.map(i => i.full)))].sort();
-                let html = '<div class="ingredient-grid all-ingredients">';
-                allIngs.forEach(opt => {
-                    html +=
-                        `<span class="ing-chit" data-ing="${escapeHTML(opt)}" data-correct="${correctSet.has(opt)}">${escapeHTML(opt)}</span>`;
+            const perfect = allOk;
+            let msg = perfect ? '✅ Perfect!' :
+                (selectedOk.size >= correctSet.size * 0.6 ? '👍 Close!' : '❌ Keep studying.');
+            if (glassFeedback) msg += ' ' + glassFeedback;
+            if (garnishFeedback) msg += ' ' + garnishFeedback;
+            finishQuiz(drink, perfect, msg);
+        }
+
+        function skipL1(drink) {
+            quizContent.querySelectorAll('.ing-chit').forEach(ch => {
+                if (ch.dataset.correct === 'true') ch.classList.add('correct-reveal');
+            });
+            const glassRows = quizContent.querySelectorAll('.select-row');
+            if (glassRows.length >= 2) {
+                const correctGlass = drink.glassware || '';
+                glassRows[0].querySelectorAll('.chit').forEach(ch => {
+                    if (norm(ch.dataset.value) === norm(correctGlass)) ch.classList.add('correct-reveal');
                 });
-                html += '</div>';
+                const correctGarnSet = garnishSet(drink.garnish);
+                glassRows[1].querySelectorAll('.chit').forEach(ch => {
+                    if (correctGarnSet.has(norm(ch.dataset.value))) ch.classList.add('correct-reveal');
+                });
+            }
+            finishQuiz(drink, false, '📖 Answer revealed.');
+        }
 
-                const allGlass = getAllGlassware();
-                html += buildSelectRow(allGlass, new Set(), 'Glassware');
+        // ── LEVEL 2 ──
+        function renderL2(drink) {
+            hintText.textContent = 'Select all correct ingredients from the FULL list, plus glassware and garnish.';
+            const correctSet = new Set(drink.ingredients.map(i => i.full));
+            const allIngs = [...new Set(cocktails.flatMap(c => c.ingredients.map(i => i.full)))].sort();
+            let html = '<div class="ingredient-grid all-ingredients">';
+            allIngs.forEach(opt => {
+                html +=
+                    `<span class="ing-chit" data-ing="${escapeHTML(opt)}" data-correct="${correctSet.has(opt)}">${escapeHTML(opt)}</span>`;
+            });
+            html += '</div>';
 
-                const allGarn = getAllGarnishItems();
-                html += buildSelectRow(allGarn, new Set(), 'Garnish');
+            const allGlass = getAllGlassware();
+            html += buildSelectRow(allGlass, new Set(), 'Glassware');
 
-                quizContent.innerHTML = html;
+            const allGarn = getAllGarnishItems();
+            html += buildSelectRow(allGarn, new Set(), 'Garnish');
 
-                quizContent.querySelectorAll('.ing-chit').forEach(ch => {
+            quizContent.innerHTML = html;
+
+            quizContent.querySelectorAll('.ing-chit').forEach(ch => {
+                ch.addEventListener('click', () => {
+                    if (isRevealed) return;
+                    ch.classList.toggle('selected');
+                });
+            });
+
+            const glassRows = quizContent.querySelectorAll('.select-row');
+            if (glassRows.length >= 2) {
+                const glassRow = glassRows[0];
+                const glassChits = glassRow.querySelectorAll('.chit');
+                glassChits.forEach(ch => {
+                    ch.addEventListener('click', () => {
+                        if (isRevealed) return;
+                        glassChits.forEach(c => c.classList.remove('selected'));
+                        ch.classList.add('selected');
+                    });
+                });
+                const garnishRow = glassRows[1];
+                garnishRow.querySelectorAll('.chit').forEach(ch => {
                     ch.addEventListener('click', () => {
                         if (isRevealed) return;
                         ch.classList.toggle('selected');
                     });
                 });
-
-                const glassRows = quizContent.querySelectorAll('.select-row');
-                if (glassRows.length >= 2) {
-                    const glassRow = glassRows[0];
-                    const glassChits = glassRow.querySelectorAll('.chit');
-                    glassChits.forEach(ch => {
-                        ch.addEventListener('click', () => {
-                            if (isRevealed) return;
-                            glassChits.forEach(c => c.classList.remove('selected'));
-                            ch.classList.add('selected');
-                        });
-                    });
-                    const garnishRow = glassRows[1];
-                    garnishRow.querySelectorAll('.chit').forEach(ch => {
-                        ch.addEventListener('click', () => {
-                            if (isRevealed) return;
-                            ch.classList.toggle('selected');
-                        });
-                    });
-                }
             }
+        }
 
-            function checkL2(drink) { checkL1(drink); }
+        function checkL2(drink) { checkL1(drink); }
 
-            function skipL2(drink) { skipL1(drink); }
+        function skipL2(drink) { skipL1(drink); }
 
-            // ── LEVEL 3 ──
-            function renderL3(drink) {
-                hintText.textContent = l3HintsVisible ? 'Type ingredients into each category, plus glassware and garnish.' :
-                    'Type ingredients into each category, plus glassware and garnish. (hints hidden)';
-                const roles = { spirit: [], liqueur: [], mixer: [], other: [] };
-                drink.ingredients.forEach(i => roles[i.role].push(i));
-                const labels = { spirit: 'Spirits', liqueur: 'Liqueurs/Syrups', mixer: 'Juices/Mixers',
-                    other: 'Other' };
-                let html = '<div class="role-slots">';
-                ['spirit', 'liqueur', 'mixer', 'other'].forEach(role => {
-                    if (roles[role].length === 0) return;
-                    const countDisplay = l3HintsVisible ? ` (${roles[role].length})` : '';
-                    html += `<div class="role-slot"><label>${labels[role]}${countDisplay}</label>
+        // ── LEVEL 3 ──
+        function renderL3(drink) {
+            hintText.textContent = l3HintsVisible ? 'Type ingredients into each category, plus glassware and garnish.' :
+                'Type ingredients into each category, plus glassware and garnish. (hints hidden)';
+            const roles = { spirit: [], liqueur: [], mixer: [], other: [] };
+            drink.ingredients.forEach(i => roles[i.role].push(i));
+            const labels = { spirit: 'Spirits', liqueur: 'Liqueurs/Syrups', mixer: 'Juices/Mixers',
+                other: 'Other' };
+            let html = '<div class="role-slots">';
+            ['spirit', 'liqueur', 'mixer', 'other'].forEach(role => {
+                if (roles[role].length === 0) return;
+                const countDisplay = l3HintsVisible ? ` (${roles[role].length})` : '';
+                html += `<div class="role-slot"><label>${labels[role]}${countDisplay}</label>
                         <input type="text" class="role-input" data-role="${role}" placeholder="Type here...">
                         <div class="role-feedback" data-fb="${role}"></div></div>`;
-                });
-                html += '</div>';
+            });
+            html += '</div>';
 
-                html += `<div class="extra-fields">
+            html += `<div class="extra-fields">
                     <div class="field"><label>Glassware</label>
                         <input type="text" id="l3Glassware" placeholder="e.g. Coupe">
                         <div class="fb" id="l3GlassFb"></div>
@@ -2189,123 +2295,124 @@
                     </div>
                 </div>`;
 
-                quizContent.innerHTML = html;
+            quizContent.innerHTML = html;
 
-                if (!l3HintsVisible) {
-                    ingCount.textContent = '🫣 hints hidden';
-                } else {
-                    ingCount.textContent = drink.ingredients.length + ' ingredients';
-                }
+            if (!l3HintsVisible) {
+                ingCount.textContent = '🫣 hints hidden';
+            } else {
+                ingCount.textContent = drink.ingredients.length + ' ingredients';
             }
+        }
 
-            function checkL3(drink) {
-                const roles = { spirit: [], liqueur: [], mixer: [], other: [] };
-                drink.ingredients.forEach(i => roles[i.role].push(i));
-                let totalOk = 0;
-                const totalExp = drink.ingredients.length;
-                let roleOk = true;
-                quizContent.querySelectorAll('.role-input').forEach(inp => {
-                    const role = inp.dataset.role;
-                    const exp = roles[role] || [];
-                    const parts = inp.value.split(/[,;]+/).map(s => s.trim()).filter(s => s.length > 0);
-                    const used = new Set();
-                    const matched = [];
-                    const extra = [];
-                    parts.forEach(p => {
-                        let found = false;
-                        for (const ing of exp) {
-                            if (used.has(ing.full)) continue;
-                            if (ingMatch(p, ing.matchKeys)) { matched.push(ing);
-                                used.add(ing.full);
-                                found = true; break; }
-                        }
-                        if (!found) extra.push(p);
-                    });
-                    const missed = exp.filter(i => !used.has(i.full));
-                    totalOk += matched.length;
-                    const fb = quizContent.querySelector(`[data-fb="${role}"]`);
-                    fb.innerHTML = (missed.length ? `<span class="missed">Missed: ${missed.map(i=>i.full).join(', ')}</span> ` :
-                        '') +
-                        (extra.length ? `<span class="extra">Extra: ${extra.join(', ')}</span>` : '');
-                    inp.className = 'role-input ' + (missed.length === 0 && extra.length === 0 && matched.length === exp
-                        .length ? 'correct' :
-                        (matched.length >= exp.length * 0.5 ? 'partial' : 'incorrect'));
-                    if (missed.length || extra.length || matched.length !== exp.length) roleOk = false;
-                });
-
-                const glassInput = $('l3Glassware');
-                const glassFb = $('l3GlassFb');
-                const glassVal = glassInput.value.trim();
-                const correctGlass = drink.glassware || '';
-                const glassOk = norm(glassVal) === norm(correctGlass) && glassVal.length > 0;
-                glassInput.className = glassOk ? 'correct' : (glassVal.length > 0 ? 'incorrect' : '');
-                if (glassOk) {
-                    glassFb.textContent = '';
-                } else {
-                    if (glassVal.length === 0) {
-                        glassFb.textContent = `Required: "${correctGlass}"`;
-                    } else {
-                        glassFb.textContent = `Expected: "${correctGlass}", got "${glassVal}"`;
+        function checkL3(drink) {
+            const roles = { spirit: [], liqueur: [], mixer: [], other: [] };
+            drink.ingredients.forEach(i => roles[i.role].push(i));
+            let totalOk = 0;
+            const totalExp = drink.ingredients.length;
+            let roleOk = true;
+            quizContent.querySelectorAll('.role-input').forEach(inp => {
+                const role = inp.dataset.role;
+                const exp = roles[role] || [];
+                const parts = inp.value.split(/[,;]+/).map(s => s.trim()).filter(s => s.length > 0);
+                const used = new Set();
+                const matched = [];
+                const extra = [];
+                parts.forEach(p => {
+                    let found = false;
+                    for (const ing of exp) {
+                        if (used.has(ing.full)) continue;
+                        if (ingMatch(p, ing.matchKeys)) { matched.push(ing);
+                            used.add(ing.full);
+                            found = true; break; }
                     }
-                }
-
-                const garnInput = $('l3Garnish');
-                const garnFb = $('l3GarnishFb');
-                const garnParts = garnInput.value.split(/[,;]+/).map(s => s.trim()).filter(s => s.length > 0);
-                const userGarnSet = new Set(garnParts.map(norm));
-                const correctGarnSet = garnishSet(drink.garnish);
-                const garnOk = userGarnSet.size === correctGarnSet.size &&
-                    [...userGarnSet].every(v => correctGarnSet.has(v));
-                garnInput.className = garnOk ? 'correct' : (garnParts.length > 0 ? 'incorrect' : '');
-                const missing = [...correctGarnSet].filter(v => !userGarnSet.has(v));
-                const extra = garnParts.filter(p => !correctGarnSet.has(norm(p)));
-                let garnMsg = '';
-                if (!garnOk) {
-                    if (missing.length) garnMsg += 'Missing: ' + missing.join(', ');
-                    if (extra.length) garnMsg += (garnMsg ? '; ' : '') + 'Extra: ' + extra.join(', ');
-                }
-                garnFb.textContent = garnMsg;
-
-                const perfect = roleOk && glassOk && garnOk;
-                const msg = perfect ? '✅ Perfect!' :
-                    (totalOk >= totalExp * 0.6 ? '👍 Close!' : '❌ Keep studying.');
-                finishQuiz(drink, perfect, msg);
-            }
-
-            function skipL3(drink) {
-                const roles = { spirit: [], liqueur: [], mixer: [], other: [] };
-                drink.ingredients.forEach(i => roles[i.role].push(i));
-                quizContent.querySelectorAll('.role-input').forEach(inp => {
-                    const role = inp.dataset.role;
-                    inp.value = (roles[role] || []).map(i => i.full).join(', ');
-                    inp.classList.add('correct');
+                    if (!found) extra.push(p);
                 });
-                const glassInput = $('l3Glassware');
-                glassInput.value = drink.glassware || '';
-                glassInput.classList.add('correct');
-                const garnInput = $('l3Garnish');
-                garnInput.value = drink.garnish || '';
-                garnInput.classList.add('correct');
-                finishQuiz(drink, false, '📖 Answer revealed.');
-            }
+                const missed = exp.filter(i => !used.has(i.full));
+                totalOk += matched.length;
+                const fb = quizContent.querySelector(`[data-fb="${role}"]`);
+                fb.innerHTML = (missed.length ? `<span class="missed">Missed: ${missed.map(i=>i.full).join(', ')}</span> ` :
+                    '') +
+                    (extra.length ? `<span class="extra">Extra: ${extra.join(', ')}</span>` : '');
+                inp.className = 'role-input ' + (missed.length === 0 && extra.length === 0 && matched.length === exp
+                    .length ? 'correct' :
+                    (matched.length >= exp.length * 0.5 ? 'partial' : 'incorrect'));
+                if (missed.length || extra.length || matched.length !== exp.length) roleOk = false;
+            });
 
-            function toggleL3Hints() {
-                l3HintsVisible = !l3HintsVisible;
-                l3ToggleBtn.textContent = l3HintsVisible ? '👁️ Hide hints' : '👁️ Show hints';
-                if (currentDrinkIndex >= 0 && filteredDrinks[currentDrinkIndex]) {
-                    const drink = filteredDrinks[currentDrinkIndex];
-                    renderL3(drink);
+            const glassInput = $('l3Glassware');
+            const glassFb = $('l3GlassFb');
+            const glassVal = glassInput.value.trim();
+            const correctGlass = drink.glassware || '';
+            const glassOk = norm(glassVal) === norm(correctGlass) && glassVal.length > 0;
+            glassInput.className = glassOk ? 'correct' : (glassVal.length > 0 ? 'incorrect' : '');
+            if (glassOk) {
+                glassFb.textContent = '';
+            } else {
+                if (glassVal.length === 0) {
+                    glassFb.textContent = `Required: "${correctGlass}"`;
+                } else {
+                    glassFb.textContent = `Expected: "${correctGlass}", got "${glassVal}"`;
                 }
             }
 
-            // ── LEVEL 4 ──
-            function renderL4(drink) {
-                const total = drink.ingredients.length;
-                hintText.textContent = l4HintsVisible ?
-                    `List all ${total} ingredients WITH measurements, plus glassware and garnish.` :
-                    'List all ingredients WITH measurements, plus glassware and garnish. (count hidden)';
-                let html = `<textarea class="blank-input" id="blankInput" placeholder="50ml vanilla vodka, 25ml coffee..."></textarea>`;
-                html += `<div class="extra-fields">
+            const garnInput = $('l3Garnish');
+            const garnFb = $('l3GarnishFb');
+            const garnParts = garnInput.value.split(/[,;]+/).map(s => s.trim()).filter(s => s.length > 0);
+            const userGarnSet = new Set(garnParts.map(norm));
+            const correctGarnSet = garnishSet(drink.garnish);
+            const garnOk = userGarnSet.size === correctGarnSet.size &&
+                [...userGarnSet].every(v => correctGarnSet.has(v));
+            garnInput.className = garnOk ? 'correct' : (garnParts.length > 0 ? 'incorrect' : '');
+            const missing = [...correctGarnSet].filter(v => !userGarnSet.has(v));
+            const extra = garnParts.filter(p => !correctGarnSet.has(norm(p)));
+            let garnMsg = '';
+            if (!garnOk) {
+                if (missing.length) garnMsg += 'Missing: ' + missing.join(', ');
+                if (extra.length) garnMsg += (garnMsg ? '; ' : '') + 'Extra: ' + extra.join(', ');
+            }
+            garnFb.textContent = garnMsg;
+
+            const perfect = roleOk && glassOk && garnOk;
+            const msg = perfect ? '✅ Perfect!' :
+                (totalOk >= totalExp * 0.6 ? '👍 Close!' : '❌ Keep studying.');
+            finishQuiz(drink, perfect, msg);
+        }
+
+        function skipL3(drink) {
+            const roles = { spirit: [], liqueur: [], mixer: [], other: [] };
+            drink.ingredients.forEach(i => roles[i.role].push(i));
+            quizContent.querySelectorAll('.role-input').forEach(inp => {
+                const role = inp.dataset.role;
+                inp.value = (roles[role] || []).map(i => i.full).join(', ');
+                inp.classList.add('correct');
+            });
+            const glassInput = $('l3Glassware');
+            glassInput.value = drink.glassware || '';
+            glassInput.classList.add('correct');
+            const garnInput = $('l3Garnish');
+            garnInput.value = drink.garnish || '';
+            garnInput.classList.add('correct');
+            finishQuiz(drink, false, '📖 Answer revealed.');
+        }
+
+        function toggleL3Hints() {
+            l3HintsVisible = !l3HintsVisible;
+            l3ToggleBtn.textContent = l3HintsVisible ? '👁️ Hide hints' : '👁️ Show hints';
+            if (currentDrinkIndex >= 0 && filteredDrinks[currentDrinkIndex]) {
+                const drink = filteredDrinks[currentDrinkIndex];
+                renderL3(drink);
+            }
+        }
+
+        // ── LEVEL 4 ──
+        function renderL4(drink) {
+            const total = drink.ingredients.length;
+            hintText.textContent = l4HintsVisible ?
+                `List all ${total} ingredients WITH measurements, plus glassware and garnish.` :
+                'List all ingredients WITH measurements, plus glassware and garnish. (count hidden)';
+            let html =
+                `<textarea class="blank-input" id="blankInput" placeholder="50ml vanilla vodka, 25ml coffee..."></textarea>`;
+            html += `<div class="extra-fields">
                     <div class="field"><label>Glassware</label>
                         <input type="text" id="l4Glassware" placeholder="e.g. Coupe">
                         <div class="fb" id="l4GlassFb"></div>
@@ -2315,257 +2422,257 @@
                         <div class="fb" id="l4GarnishFb"></div>
                     </div>
                 </div>`;
-                quizContent.innerHTML = html;
-                if (!l4HintsVisible) {
-                    ingCount.textContent = '🫣 count hidden';
+            quizContent.innerHTML = html;
+            if (!l4HintsVisible) {
+                ingCount.textContent = '🫣 count hidden';
+            } else {
+                ingCount.textContent = total + ' ingredients';
+            }
+        }
+
+        function parsePairs(str) {
+            const parts = str.split(/[,;\n]+/).map(s => s.trim()).filter(s => s.length > 0);
+            return parts.map(p => {
+                const m = p.match(/^([\d\/.\s]*(?:ml|oz|dash|dashes|barspoon|tsp|tbsp|cup|cl|shot|parts?|to\s+taste|top)?)\s*(.+)$/i);
+                if (m && m[1].trim()) return { meas: m[1].trim(), name: m[2].trim(), raw: p };
+                return { meas: '', name: p, raw: p };
+            });
+        }
+
+        function checkL4(drink) {
+            const ta = $('blankInput');
+            const pairs = parsePairs(ta.value);
+            const used = new Set();
+            const results = [];
+            const matchedNames = [];
+
+            pairs.forEach(pair => {
+                let best = null;
+                for (const ing of drink.ingredients) {
+                    if (used.has(ing.full)) continue;
+                    if (ingMatch(pair.name, ing.matchKeys)) {
+                        best = ing;
+                        break;
+                    }
+                }
+                if (best) {
+                    used.add(best.full);
+                    const hasMeas = pair.meas && pair.meas.length > 0;
+                    const measOk = hasMeas && norm(pair.meas) === norm(best.measurement);
+                    results.push({
+                        ing: best,
+                        meas: pair.meas,
+                        measOk: measOk,
+                        matched: true,
+                        hasMeas: hasMeas
+                    });
+                    matchedNames.push(best.full);
                 } else {
-                    ingCount.textContent = total + ' ingredients';
-                }
-            }
-
-            function parsePairs(str) {
-                const parts = str.split(/[,;\n]+/).map(s => s.trim()).filter(s => s.length > 0);
-                return parts.map(p => {
-                    // FIX: match "top" as a valid measurement unit
-                    const m = p.match(/^([\d\/.\s]*(?:ml|oz|dash|dashes|barspoon|tsp|tbsp|cup|cl|shot|parts?|to\s+taste|top)?)\s*(.+)$/i);
-                    if (m && m[1].trim()) return { meas: m[1].trim(), name: m[2].trim(), raw: p };
-                    return { meas: '', name: p, raw: p };
-                });
-            }
-
-            function checkL4(drink) {
-                const ta = $('blankInput');
-                const pairs = parsePairs(ta.value);
-                const used = new Set();
-                const results = [];
-                const matchedNames = [];
-
-                pairs.forEach(pair => {
-                    let best = null;
-                    for (const ing of drink.ingredients) {
-                        if (used.has(ing.full)) continue;
-                        if (ingMatch(pair.name, ing.matchKeys)) {
-                            best = ing;
-                            break;
-                        }
-                    }
-                    if (best) {
-                        used.add(best.full);
-                        const hasMeas = pair.meas && pair.meas.length > 0;
-                        const measOk = hasMeas && norm(pair.meas) === norm(best.measurement);
-                        results.push({
-                            ing: best,
-                            meas: pair.meas,
-                            measOk: measOk,
-                            matched: true,
-                            hasMeas: hasMeas
-                        });
-                        matchedNames.push(best.full);
-                    } else {
-                        results.push({
-                            ing: null,
-                            meas: pair.meas,
-                            raw: pair.raw,
-                            unknown: true,
-                            matched: false
-                        });
-                    }
-                });
-
-                const missed = drink.ingredients.filter(i => !used.has(i.full));
-                const allFound = missed.length === 0 && !results.some(r => r.unknown);
-                const allMeasOk = results.every(r => r.matched ? (r.hasMeas && r.measOk) : true);
-                const ingredientsPerfect = allFound && allMeasOk;
-
-                const glassInput = $('l4Glassware');
-                const glassFb = $('l4GlassFb');
-                const glassVal = glassInput.value.trim();
-                const correctGlass = drink.glassware || '';
-                const glassOk = norm(glassVal) === norm(correctGlass) && glassVal.length > 0;
-                glassInput.className = glassOk ? 'correct' : (glassVal.length > 0 ? 'incorrect' : '');
-                if (glassOk) {
-                    glassFb.textContent = '';
-                } else {
-                    if (glassVal.length === 0) {
-                        glassFb.textContent = `Required: "${correctGlass}"`;
-                    } else {
-                        glassFb.textContent = `Expected: "${correctGlass}", got "${glassVal}"`;
-                    }
-                }
-
-                const garnInput = $('l4Garnish');
-                const garnFb = $('l4GarnishFb');
-                const garnParts = garnInput.value.split(/[,;]+/).map(s => s.trim()).filter(s => s.length > 0);
-                const userGarnSet = new Set(garnParts.map(norm));
-                const correctGarnSet = garnishSet(drink.garnish);
-                const garnOk = userGarnSet.size === correctGarnSet.size &&
-                    [...userGarnSet].every(v => correctGarnSet.has(v));
-                garnInput.className = garnOk ? 'correct' : (garnParts.length > 0 ? 'incorrect' : '');
-                const missingGarn = [...correctGarnSet].filter(v => !userGarnSet.has(v));
-                const extraGarn = garnParts.filter(p => !correctGarnSet.has(norm(p)));
-                let garnMsg = '';
-                if (!garnOk) {
-                    if (missingGarn.length) garnMsg += 'Missing: ' + missingGarn.join(', ');
-                    if (extraGarn.length) garnMsg += (garnMsg ? '; ' : '') + 'Extra: ' + extraGarn.join(', ');
-                }
-                garnFb.textContent = garnMsg;
-
-                const perfect = ingredientsPerfect && glassOk && garnOk;
-
-                let msg = '';
-                if (perfect) {
-                    msg = '✅ Perfect! All ingredients, measurements, glassware and garnish correct.';
-                } else {
-                    let feedbackParts = [];
-                    if (missed.length) {
-                        feedbackParts.push('❌ Missing ingredients: ' + missed.map(i =>
-                            `${i.full} (${i.measurement || 'no meas'})`).join(', '));
-                    }
-                    const badMeas = results.filter(r => r.matched && (!r.hasMeas || !r.measOk));
-                    if (badMeas.length) {
-                        const details = badMeas.map(r => {
-                            if (!r.hasMeas) return `"${r.raw}" → missing measurement (expected "${r.ing.measurement}")`;
-                            return `"${r.raw}" → wrong measurement (expected "${r.ing.measurement}")`;
-                        });
-                        feedbackParts.push('⚠️ Measurement issue: ' + details.join('; '));
-                    }
-                    const unk = results.filter(r => r.unknown);
-                    if (unk.length) {
-                        feedbackParts.push('❓ Unrecognized: ' + unk.map(r => `"${r.raw}"`).join(', '));
-                    }
-                    if (!glassOk) {
-                        feedbackParts.push(`❌ Glassware: expected "${correctGlass}"`);
-                    }
-                    if (!garnOk) {
-                        if (missingGarn.length || extraGarn.length) {
-                            feedbackParts.push('❌ Garnish: ' + garnMsg);
-                        } else {
-                            feedbackParts.push('❌ Garnish: expected "' + (drink.garnish || '') + '"');
-                        }
-                    }
-                    if (feedbackParts.length === 0) {
-                        feedbackParts.push('Check your answers again.');
-                    }
-                    msg = feedbackParts.join('. ');
-                }
-
-                finishQuiz(drink, perfect, msg);
-                ta.disabled = true;
-            }
-
-            function skipL4(drink) {
-                const ta = $('blankInput');
-                ta.value = drink.ingredients.map(i => (i.measurement ? i.measurement + ' ' : '') + i.full).join(', ');
-                ta.disabled = true;
-                const glassInput = $('l4Glassware');
-                glassInput.value = drink.glassware || '';
-                glassInput.classList.add('correct');
-                const garnInput = $('l4Garnish');
-                garnInput.value = drink.garnish || '';
-                garnInput.classList.add('correct');
-                finishQuiz(drink, false, '📖 Answer revealed.');
-            }
-
-            function toggleL4Hints() {
-                l4HintsVisible = !l4HintsVisible;
-                l4ToggleBtn.textContent = l4HintsVisible ? '👁️ Hide ingredient count' :
-                    '👁️ Show ingredient count';
-                if (currentDrinkIndex >= 0 && filteredDrinks[currentDrinkIndex]) {
-                    const drink = filteredDrinks[currentDrinkIndex];
-                    renderL4(drink);
-                }
-            }
-
-            // ── FINISH ──
-            function finishQuiz(drink, correct, msg) {
-                isRevealed = true;
-                btnSubmit.style.display = 'none';
-                btnSkip.style.display = 'none';
-                btnNext.style.display = '';
-                recordAttempt(drink.name, currentLevel, correct);
-                resultBanner.innerHTML =
-                    `<div class="result-banner ${correct?'perfect':(msg.includes('Close')||msg.includes('correct')?'good':'poor')}">${msg}</div>`;
-                updateProgress();
-            }
-
-            // ─────────────────────────────────────
-            // PROGRESS
-            // ─────────────────────────────────────
-            function updateProgress() {
-                progressLevelLabel.textContent = currentLevel;
-                const drinks = currentCategory === 'all' ? [...cocktails] : cocktails.filter(c => {
-                    if (currentCategory === 'focus') return c.focus;
-                    return c.category === currentCategory;
-                });
-                let html = '';
-                drinks.forEach(d => {
-                    const pct = getPct(d.name, currentLevel);
-                    const w = pct !== null ? pct : 0;
-                    const cls = pct !== null ? (pct >= 80 ? 'high' : (pct >= 50 ? 'mid' : 'low')) : 'low';
-                    html += `<div class="progress-item"><span class="p-name">${escapeHTML(d.name)}</span>
-                        <div class="progress-bar-mini"><div class="fill ${cls}" style="width:${w}%"></div></div>
-                        <span class="pct">${pct !== null ? pct+'%' : '--'}</span></div>`;
-                });
-                progressGrid.innerHTML = html || '<div style="text-align:center;color:var(--text-dim);">No drinks.</div>';
-            }
-
-            // ─────────────────────────────────────
-            // CHEAT SHEET
-            // ─────────────────────────────────────
-            function buildCheatSheet() {
-                const grouped = {};
-                cocktails.forEach(c => {
-                    if (!grouped[c.category]) grouped[c.category] = [];
-                    grouped[c.category].push(c);
-                });
-                let html = '<h3>📋 Full Menu</h3>';
-                for (const [cat, drinks] of Object.entries(grouped)) {
-                    html += `<h4 style="color:var(--gold);margin-top:10px;">${cat}</h4>`;
-                    drinks.forEach(d => {
-                        const focusMark = d.focus ? ' 🎯' : '';
-                        const customMark = d._custom ? ' ✨' : '';
-                        const glass = d.glassware ? ' | 🍸 ' + d.glassware : '';
-                        const garn = d.garnish ? ' | 🌿 ' + d.garnish : '';
-                        html += `<div class="cheat-drink"><div class="cd-name">${escapeHTML(d.name)}${focusMark}${customMark}${glass}${garn}</div>
-                            <div class="cd-ingredients">${d.ingredients.map(i=>(i.measurement?i.measurement+' ':'')+i.full).join(' · ')}</div></div>`;
+                    results.push({
+                        ing: null,
+                        meas: pair.meas,
+                        raw: pair.raw,
+                        unknown: true,
+                        matched: false
                     });
                 }
-                cheatSheet.innerHTML = html;
+            });
+
+            const missed = drink.ingredients.filter(i => !used.has(i.full));
+            const allFound = missed.length === 0 && !results.some(r => r.unknown);
+            const allMeasOk = results.every(r => r.matched ? (r.hasMeas && r.measOk) : true);
+            const ingredientsPerfect = allFound && allMeasOk;
+
+            const glassInput = $('l4Glassware');
+            const glassFb = $('l4GlassFb');
+            const glassVal = glassInput.value.trim();
+            const correctGlass = drink.glassware || '';
+            const glassOk = norm(glassVal) === norm(correctGlass) && glassVal.length > 0;
+            glassInput.className = glassOk ? 'correct' : (glassVal.length > 0 ? 'incorrect' : '');
+            if (glassOk) {
+                glassFb.textContent = '';
+            } else {
+                if (glassVal.length === 0) {
+                    glassFb.textContent = `Required: "${correctGlass}"`;
+                } else {
+                    glassFb.textContent = `Expected: "${correctGlass}", got "${glassVal}"`;
+                }
             }
 
-            // ─────────────────────────────────────
-            // SETTINGS MODAL (unchanged)
-            // ─────────────────────────────────────
-            function openSettings() {
-                const grouped = {};
-                cocktails.forEach(c => {
-                    if (!grouped[c.category]) grouped[c.category] = [];
-                    grouped[c.category].push(c);
-                });
-                let html = '<h2>⚙️ Measurements, Ingredients & Focus <button class="modal-close" id="closeSettingsBtn">&times;</button></h2>';
-                html +=
-                    '<p style="color:var(--text-dim);margin-bottom:10px;font-size:0.8rem;">Edit measurements, delete or add ingredients, and toggle Focus. Custom cocktails appear at the bottom.</p>';
+            const garnInput = $('l4Garnish');
+            const garnFb = $('l4GarnishFb');
+            const garnParts = garnInput.value.split(/[,;]+/).map(s => s.trim()).filter(s => s.length > 0);
+            const userGarnSet = new Set(garnParts.map(norm));
+            const correctGarnSet = garnishSet(drink.garnish);
+            const garnOk = userGarnSet.size === correctGarnSet.size &&
+                [...userGarnSet].every(v => correctGarnSet.has(v));
+            garnInput.className = garnOk ? 'correct' : (garnParts.length > 0 ? 'incorrect' : '');
+            const missingGarn = [...correctGarnSet].filter(v => !userGarnSet.has(v));
+            const extraGarn = garnParts.filter(p => !correctGarnSet.has(norm(p)));
+            let garnMsg = '';
+            if (!garnOk) {
+                if (missingGarn.length) garnMsg += 'Missing: ' + missingGarn.join(', ');
+                if (extraGarn.length) garnMsg += (garnMsg ? '; ' : '') + 'Extra: ' + extraGarn.join(', ');
+            }
+            garnFb.textContent = garnMsg;
 
-                for (const [cat, drinks] of Object.entries(grouped)) {
-                    html += `<h3 style="color:var(--gold);margin-top:12px;font-size:0.9rem;">${cat}</h3>`;
-                    drinks.forEach(d => {
-                        const isCustom = d._custom || false;
-                        html += `<div class="settings-drink" data-drink="${escapeHTML(d.name)}"><h4>
+            const perfect = ingredientsPerfect && glassOk && garnOk;
+
+            let msg = '';
+            if (perfect) {
+                msg = '✅ Perfect! All ingredients, measurements, glassware and garnish correct.';
+            } else {
+                let feedbackParts = [];
+                if (missed.length) {
+                    feedbackParts.push('❌ Missing ingredients: ' + missed.map(i =>
+                        `${i.full} (${i.measurement || 'no meas'})`).join(', '));
+                }
+                const badMeas = results.filter(r => r.matched && (!r.hasMeas || !r.measOk));
+                if (badMeas.length) {
+                    const details = badMeas.map(r => {
+                        if (!r.hasMeas) return `"${r.raw}" → missing measurement (expected "${r.ing.measurement}")`;
+                        return `"${r.raw}" → wrong measurement (expected "${r.ing.measurement}")`;
+                    });
+                    feedbackParts.push('⚠️ Measurement issue: ' + details.join('; '));
+                }
+                const unk = results.filter(r => r.unknown);
+                if (unk.length) {
+                    feedbackParts.push('❓ Unrecognized: ' + unk.map(r => `"${r.raw}"`).join(', '));
+                }
+                if (!glassOk) {
+                    feedbackParts.push(`❌ Glassware: expected "${correctGlass}"`);
+                }
+                if (!garnOk) {
+                    if (missingGarn.length || extraGarn.length) {
+                        feedbackParts.push('❌ Garnish: ' + garnMsg);
+                    } else {
+                        feedbackParts.push('❌ Garnish: expected "' + (drink.garnish || '') + '"');
+                    }
+                }
+                if (feedbackParts.length === 0) {
+                    feedbackParts.push('Check your answers again.');
+                }
+                msg = feedbackParts.join('. ');
+            }
+
+            finishQuiz(drink, perfect, msg);
+            ta.disabled = true;
+        }
+
+        function skipL4(drink) {
+            const ta = $('blankInput');
+            ta.value = drink.ingredients.map(i => (i.measurement ? i.measurement + ' ' : '') + i.full).join(', ');
+            ta.disabled = true;
+            const glassInput = $('l4Glassware');
+            glassInput.value = drink.glassware || '';
+            glassInput.classList.add('correct');
+            const garnInput = $('l4Garnish');
+            garnInput.value = drink.garnish || '';
+            garnInput.classList.add('correct');
+            finishQuiz(drink, false, '📖 Answer revealed.');
+        }
+
+        function toggleL4Hints() {
+            l4HintsVisible = !l4HintsVisible;
+            l4ToggleBtn.textContent = l4HintsVisible ? '👁️ Hide ingredient count' :
+                '👁️ Show ingredient count';
+            if (currentDrinkIndex >= 0 && filteredDrinks[currentDrinkIndex]) {
+                const drink = filteredDrinks[currentDrinkIndex];
+                renderL4(drink);
+            }
+        }
+
+        // ── FINISH ──
+        function finishQuiz(drink, correct, msg) {
+            isRevealed = true;
+            btnSubmit.style.display = 'none';
+            btnSkip.style.display = 'none';
+            btnNext.style.display = '';
+            recordAttempt(drink.name, currentLevel, correct);
+            resultBanner.innerHTML =
+                `<div class="result-banner ${correct?'perfect':(msg.includes('Close')||msg.includes('correct')?'good':'poor')}">${msg}</div>`;
+            updateProgress();
+        }
+
+        // ─────────────────────────────────────
+        // PROGRESS
+        // ─────────────────────────────────────
+        function updateProgress() {
+            progressLevelLabel.textContent = currentLevel;
+            const drinks = currentCategory === 'all' ? [...cocktails] : cocktails.filter(c => {
+                if (currentCategory === 'focus') return c.focus;
+                return c.category === currentCategory;
+            });
+            let html = '';
+            drinks.forEach(d => {
+                const pct = getPct(d.name, currentLevel);
+                const w = pct !== null ? pct : 0;
+                const cls = pct !== null ? (pct >= 80 ? 'high' : (pct >= 50 ? 'mid' : 'low')) : 'low';
+                html += `<div class="progress-item"><span class="p-name">${escapeHTML(d.name)}</span>
+                        <div class="progress-bar-mini"><div class="fill ${cls}" style="width:${w}%"></div></div>
+                        <span class="pct">${pct !== null ? pct+'%' : '--'}</span></div>`;
+            });
+            progressGrid.innerHTML = html || '<div style="text-align:center;color:var(--text-dim);">No drinks.</div>';
+        }
+
+        // ─────────────────────────────────────
+        // CHEAT SHEET
+        // ─────────────────────────────────────
+        function buildCheatSheet() {
+            const grouped = {};
+            cocktails.forEach(c => {
+                if (!grouped[c.category]) grouped[c.category] = [];
+                grouped[c.category].push(c);
+            });
+            let html = '<h3>📋 Full Menu</h3>';
+            for (const [cat, drinks] of Object.entries(grouped)) {
+                html += `<h4 style="color:var(--gold);margin-top:10px;">${cat}</h4>`;
+                drinks.forEach(d => {
+                    const focusMark = d.focus ? ' 🎯' : '';
+                    const customMark = d._custom ? ' ✨' : '';
+                    const glass = d.glassware ? ' | 🍸 ' + d.glassware : '';
+                    const garn = d.garnish ? ' | 🌿 ' + d.garnish : '';
+                    html += `<div class="cheat-drink"><div class="cd-name">${escapeHTML(d.name)}${focusMark}${customMark}${glass}${garn}</div>
+                            <div class="cd-ingredients">${d.ingredients.map(i=>(i.measurement?i.measurement+' ':'')+i.full).join(' · ')}</div></div>`;
+                });
+            }
+            cheatSheet.innerHTML = html;
+        }
+
+        // ─────────────────────────────────────
+        // SETTINGS MODAL
+        // ─────────────────────────────────────
+        function openSettings() {
+            const grouped = {};
+            cocktails.forEach(c => {
+                if (!grouped[c.category]) grouped[c.category] = [];
+                grouped[c.category].push(c);
+            });
+            let html =
+                '<h2>⚙️ Measurements, Ingredients & Focus <button class="modal-close" id="closeSettingsBtn">&times;</button></h2>';
+            html +=
+                '<p style="color:var(--text-dim);margin-bottom:10px;font-size:0.8rem;">Edit measurements, delete or add ingredients, and toggle Focus. Custom cocktails appear at the bottom.</p>';
+
+            for (const [cat, drinks] of Object.entries(grouped)) {
+                html += `<h3 style="color:var(--gold);margin-top:12px;font-size:0.9rem;">${cat}</h3>`;
+                drinks.forEach(d => {
+                    const isCustom = d._custom || false;
+                    html += `<div class="settings-drink" data-drink="${escapeHTML(d.name)}"><h4>
                             <input type="checkbox" class="focus-checkbox" data-drink="${escapeHTML(d.name)}" ${d.focus ? 'checked' : ''}>
                             ${escapeHTML(d.name)}${isCustom ? ' ✨' : ''}
                             ${isCustom ? `<span style="font-size:0.65rem;color:var(--text-dim);font-weight:400;margin-left:6px;">(custom)</span>` : ''}
                         </h4>`;
 
-                        d.ingredients.forEach(ing => {
-                            html += `<div class="settings-ingredient">
+                    d.ingredients.forEach(ing => {
+                        html += `<div class="settings-ingredient">
                                 <label>${escapeHTML(ing.full)}</label>
                                 <span class="role-badge">${ing.role}</span>
                                 <input type="text" class="meas-input" data-drink="${escapeHTML(d.name)}" data-ing="${escapeHTML(ing.full)}" value="${escapeHTML(ing.measurement||'')}" placeholder="meas">
                                 ${!isCustom ? `<button class="del-ing-btn" data-drink="${escapeHTML(d.name)}" data-ing="${escapeHTML(ing.full)}">✕</button>` : ''}
                             </div>`;
-                        });
+                    });
 
-                        html += `<div class="add-ing-form">
+                    html += `<div class="add-ing-form">
                             <input type="text" class="add-ing-name" placeholder="Ingredient name" style="flex:2;min-width:80px;">
                             <select class="add-ing-role" style="flex:1;min-width:60px;">
                                 <option value="spirit">spirit</option>
@@ -2577,11 +2684,11 @@
                             <button class="add-ing-btn" data-drink="${escapeHTML(d.name)}">+ Add</button>
                         </div>`;
 
-                        html += '</div>';
-                    });
-                }
+                    html += '</div>';
+                });
+            }
 
-                html += `<div class="new-cocktail-section">
+            html += `<div class="new-cocktail-section">
                     <h3>➕ Add New Cocktail</h3>
                     <div class="field-row">
                         <input type="text" id="newCocktailName" placeholder="Cocktail name" style="flex:2;">
@@ -2606,60 +2713,24 @@
                     </div>
                 </div>`;
 
-                html += '<button class="save-settings-btn" id="saveSettingsBtn">💾 Save All & Close</button>';
-                settingsContent.innerHTML = html;
-                settingsModal.classList.add('open');
+            html += '<button class="save-settings-btn" id="saveSettingsBtn">💾 Save All & Close</button>';
+            settingsContent.innerHTML = html;
+            settingsModal.classList.add('open');
 
-                $('closeSettingsBtn').addEventListener('click', () => settingsModal.classList.remove('open'));
+            $('closeSettingsBtn').addEventListener('click', () => settingsModal.classList.remove('open'));
 
-                settingsContent.querySelectorAll('.del-ing-btn').forEach(btn => {
-                    btn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const drinkName = this.dataset.drink;
-                        const ingName = this.dataset.ing;
-                        if (confirm(`Delete "${ingName}" from "${drinkName}"?`)) {
-                            const mods = loadMods();
-                            if (!mods[drinkName]) mods[drinkName] = { deleted: [], added: [] };
-                            if (!mods[drinkName].deleted) mods[drinkName].deleted = [];
-                            if (!mods[drinkName].deleted.includes(ingName)) {
-                                mods[drinkName].deleted.push(ingName);
-                            }
-                            saveMods(mods);
-                            cocktails = buildCocktails();
-                            updateFilteredDrinks();
-                            buildCheatSheet();
-                            openSettings();
-                            updateProgress();
-                            resetQuiz();
-                        }
-                    });
-                });
-
-                settingsContent.querySelectorAll('.add-ing-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const drinkName = this.dataset.drink;
-                        const container = this.closest('.settings-drink');
-                        const nameInput = container.querySelector('.add-ing-name');
-                        const roleSelect = container.querySelector('.add-ing-role');
-                        const measInput = container.querySelector('.add-ing-meas');
-                        const name = nameInput.value.trim();
-                        const role = roleSelect.value;
-                        const measurement = measInput.value.trim();
-                        if (!name) { alert('Please enter an ingredient name.'); return; }
-                        const drink = cocktails.find(c => c.name === drinkName);
-                        if (drink && drink.ingredients.some(i => i.full.toLowerCase() === name.toLowerCase())) {
-                            alert(`"${name}" already exists in this recipe.`);
-                            return;
-                        }
+            settingsContent.querySelectorAll('.del-ing-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const drinkName = this.dataset.drink;
+                    const ingName = this.dataset.ing;
+                    if (confirm(`Delete "${ingName}" from "${drinkName}"?`)) {
                         const mods = loadMods();
                         if (!mods[drinkName]) mods[drinkName] = { deleted: [], added: [] };
-                        if (!mods[drinkName].added) mods[drinkName].added = [];
-                        mods[drinkName].added.push({
-                            full: name,
-                            role: role,
-                            matchKeys: generateMatchKeys(name),
-                            measurement: measurement
-                        });
+                        if (!mods[drinkName].deleted) mods[drinkName].deleted = [];
+                        if (!mods[drinkName].deleted.includes(ingName)) {
+                            mods[drinkName].deleted.push(ingName);
+                        }
                         saveMods(mods);
                         cocktails = buildCocktails();
                         updateFilteredDrinks();
@@ -2667,14 +2738,50 @@
                         openSettings();
                         updateProgress();
                         resetQuiz();
-                    });
+                    }
                 });
+            });
 
-                $('addNewIngRow').addEventListener('click', function() {
-                    const list = $('newIngredientList');
-                    const row = document.createElement('div');
-                    row.className = 'new-ing-row';
-                    row.innerHTML = `
+            settingsContent.querySelectorAll('.add-ing-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const drinkName = this.dataset.drink;
+                    const container = this.closest('.settings-drink');
+                    const nameInput = container.querySelector('.add-ing-name');
+                    const roleSelect = container.querySelector('.add-ing-role');
+                    const measInput = container.querySelector('.add-ing-meas');
+                    const name = nameInput.value.trim();
+                    const role = roleSelect.value;
+                    const measurement = measInput.value.trim();
+                    if (!name) { alert('Please enter an ingredient name.'); return; }
+                    const drink = cocktails.find(c => c.name === drinkName);
+                    if (drink && drink.ingredients.some(i => i.full.toLowerCase() === name.toLowerCase())) {
+                        alert(`"${name}" already exists in this recipe.`);
+                        return;
+                    }
+                    const mods = loadMods();
+                    if (!mods[drinkName]) mods[drinkName] = { deleted: [], added: [] };
+                    if (!mods[drinkName].added) mods[drinkName].added = [];
+                    mods[drinkName].added.push({
+                        full: name,
+                        role: role,
+                        matchKeys: generateMatchKeys(name),
+                        measurement: measurement
+                    });
+                    saveMods(mods);
+                    cocktails = buildCocktails();
+                    updateFilteredDrinks();
+                    buildCheatSheet();
+                    openSettings();
+                    updateProgress();
+                    resetQuiz();
+                });
+            });
+
+            $('addNewIngRow').addEventListener('click', function() {
+                const list = $('newIngredientList');
+                const row = document.createElement('div');
+                row.className = 'new-ing-row';
+                row.innerHTML = `
                         <input type="text" class="new-ing-name" placeholder="Ingredient name" style="flex:2;">
                         <select class="new-ing-role" style="flex:1;min-width:60px;">
                             <option value="spirit">spirit</option>
@@ -2685,189 +2792,189 @@
                         <input type="text" class="new-ing-meas" placeholder="meas" style="flex:1;min-width:50px;">
                         <button class="del-new-ing">✕</button>
                     `;
-                    list.appendChild(row);
-                    row.querySelector('.del-new-ing').addEventListener('click', function() {
-                        if (list.children.length > 1) {
-                            row.remove();
-                        } else {
-                            alert('Keep at least one ingredient row.');
-                        }
-                    });
-                });
-
-                settingsContent.querySelectorAll('.new-ing-row .del-new-ing').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const row = this.closest('.new-ing-row');
-                        const list = row.closest('#newIngredientList');
-                        if (list.children.length > 1) {
-                            row.remove();
-                        } else {
-                            alert('Keep at least one ingredient row.');
-                        }
-                    });
-                });
-
-                $('saveNewCocktailBtn').addEventListener('click', function() {
-                    const name = $('newCocktailName').value.trim();
-                    const category = $('newCocktailCategory').value.trim() || 'Uncategorized';
-                    if (!name) { alert('Please enter a cocktail name.'); return; }
-                    if (cocktails.some(c => c.name.toLowerCase() === name.toLowerCase())) {
-                        alert(`A cocktail named "${name}" already exists.`);
-                        return;
-                    }
-                    const rows = document.querySelectorAll('#newIngredientList .new-ing-row');
-                    const ingredients = [];
-                    let hasError = false;
-                    rows.forEach(row => {
-                        const ingName = row.querySelector('.new-ing-name').value.trim();
-                        const role = row.querySelector('.new-ing-role').value;
-                        const measurement = row.querySelector('.new-ing-meas').value.trim();
-                        if (!ingName) { hasError = true; return; }
-                        ingredients.push({
-                            full: ingName,
-                            role: role,
-                            matchKeys: generateMatchKeys(ingName),
-                            measurement: measurement
-                        });
-                    });
-                    if (hasError) { alert('Please fill in all ingredient names.'); return; }
-                    if (ingredients.length === 0) { alert('Add at least one ingredient.'); return; }
-
-                    const custom = loadCustomCocktails();
-                    custom.push({ name, category, glassware: '', garnish: '', ingredients });
-                    saveCustomCocktails(custom);
-                    cocktails = buildCocktails();
-                    updateFilteredDrinks();
-                    buildCheatSheet();
-                    openSettings();
-                    updateProgress();
-                    resetQuiz();
-                    const catPill = document.querySelector(`.cat-pill[data-cat="${category}"]`);
-                    if (catPill) {
-                        catPill.click();
+                list.appendChild(row);
+                row.querySelector('.del-new-ing').addEventListener('click', function() {
+                    if (list.children.length > 1) {
+                        row.remove();
                     } else {
-                        document.querySelector('.cat-pill[data-cat="all"]').click();
+                        alert('Keep at least one ingredient row.');
                     }
                 });
+            });
 
-                $('saveSettingsBtn').addEventListener('click', function() {
-                    const measMap = {};
-                    settingsContent.querySelectorAll('.meas-input').forEach(inp => {
-                        const val = inp.value.trim();
-                        if (val) measMap[inp.dataset.drink + '||' + inp.dataset.ing] = val;
-                    });
-                    saveMeasurements(measMap);
-
-                    const newFocus = new Set();
-                    settingsContent.querySelectorAll('.focus-checkbox').forEach(cb => {
-                        if (cb.checked) newFocus.add(cb.dataset.drink);
-                    });
-                    saveFocusSet(newFocus);
-                    focusSet = newFocus;
-
-                    cocktails = buildCocktails();
-                    updateFilteredDrinks();
-                    buildCheatSheet();
-                    settingsModal.classList.remove('open');
-                    updateProgress();
-                    resetQuiz();
+            settingsContent.querySelectorAll('.new-ing-row .del-new-ing').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const row = this.closest('.new-ing-row');
+                    const list = row.closest('#newIngredientList');
+                    if (list.children.length > 1) {
+                        row.remove();
+                    } else {
+                        alert('Keep at least one ingredient row.');
+                    }
                 });
-            }
-
-            // ─────────────────────────────────────
-            // EVENT LISTENERS
-            // ─────────────────────────────────────
-            catBar.addEventListener('click', e => {
-                const pill = e.target.closest('.cat-pill');
-                if (!pill) return;
-                currentCategory = pill.dataset.cat;
-                catBar.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
-                pill.classList.add('active');
-                updateFilteredDrinks();
-                updateProgress();
-                resetQuiz();
             });
 
-            diffBar.addEventListener('click', e => {
-                const tab = e.target.closest('.diff-tab');
-                if (!tab) return;
-                const level = parseInt(tab.dataset.level);
-                currentLevel = level;
-                diffBar.querySelectorAll('.diff-tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                updateProgress();
-                resetQuiz();
-            });
-
-            btnSubmit.addEventListener('click', () => {
-                if (isRevealed || currentDrinkIndex < 0) return;
-                const drink = filteredDrinks[currentDrinkIndex];
-                if (currentLevel === 1) checkL1(drink);
-                else if (currentLevel === 2) checkL2(drink);
-                else if (currentLevel === 3) checkL3(drink);
-                else if (currentLevel === 4) checkL4(drink);
-            });
-
-            btnSkip.addEventListener('click', () => {
-                if (isRevealed || currentDrinkIndex < 0) return;
-                const drink = filteredDrinks[currentDrinkIndex];
-                if (currentLevel === 1) skipL1(drink);
-                else if (currentLevel === 2) skipL2(drink);
-                else if (currentLevel === 3) skipL3(drink);
-                else if (currentLevel === 4) skipL4(drink);
-            });
-
-            btnNext.addEventListener('click', loadDrink);
-
-            l3ToggleBtn.addEventListener('click', toggleL3Hints);
-            l4ToggleBtn.addEventListener('click', toggleL4Hints);
-
-            $('btnResetProgress').addEventListener('click', () => {
-                if (confirm('Reset all progress?')) {
-                    saveProgress({});
-                    updateProgress();
-                    resetQuiz();
+            $('saveNewCocktailBtn').addEventListener('click', function() {
+                const name = $('newCocktailName').value.trim();
+                const category = $('newCocktailCategory').value.trim() || 'Uncategorized';
+                if (!name) { alert('Please enter a cocktail name.'); return; }
+                if (cocktails.some(c => c.name.toLowerCase() === name.toLowerCase())) {
+                    alert(`A cocktail named "${name}" already exists.`);
+                    return;
                 }
-            });
+                const rows = document.querySelectorAll('#newIngredientList .new-ing-row');
+                const ingredients = [];
+                let hasError = false;
+                rows.forEach(row => {
+                    const ingName = row.querySelector('.new-ing-name').value.trim();
+                    const role = row.querySelector('.new-ing-role').value;
+                    const measurement = row.querySelector('.new-ing-meas').value.trim();
+                    if (!ingName) { hasError = true; return; }
+                    ingredients.push({
+                        full: ingName,
+                        role: role,
+                        matchKeys: generateMatchKeys(ingName),
+                        measurement: measurement
+                    });
+                });
+                if (hasError) { alert('Please fill in all ingredient names.'); return; }
+                if (ingredients.length === 0) { alert('Add at least one ingredient.'); return; }
 
-            cheatToggle.addEventListener('click', () => {
-                cheatSheet.classList.toggle('open');
-                cheatToggle.textContent = cheatSheet.classList.contains('open') ? '📋 Hide Menu ▴' :
-                    '📋 Show Full Menu ▾';
-            });
-
-            $('openSettingsBtn').addEventListener('click', openSettings);
-            settingsModal.addEventListener('click', e => {
-                if (e.target === settingsModal) settingsModal.classList.remove('open');
-            });
-
-            document.addEventListener('keydown', e => {
-                if (e.key === 'Enter' && !isRevealed && currentDrinkIndex >= 0 && document.activeElement?.tagName !==
-                    'TEXTAREA') {
-                    e.preventDefault();
-                    btnSubmit.click();
-                }
-                if ((e.key === 'ArrowRight' || (e.ctrlKey && e.key === 'Enter')) && isRevealed) {
-                    e.preventDefault();
-                    btnNext.click();
-                }
-            });
-
-            // ─────────────────────────────────────
-            // INIT
-            // ─────────────────────────────────────
-            function init() {
+                const custom = loadCustomCocktails();
+                custom.push({ name, category, glassware: '', garnish: '', ingredients });
+                saveCustomCocktails(custom);
+                cocktails = buildCocktails();
                 updateFilteredDrinks();
                 buildCheatSheet();
+                openSettings();
                 updateProgress();
-                loadDrink();
-                if (currentCategory === 'focus') {
-                    const focusPill = catBar.querySelector('.focus-pill');
-                    if (focusPill) focusPill.classList.add('active');
+                resetQuiz();
+                const catPill = document.querySelector(`.cat-pill[data-cat="${category}"]`);
+                if (catPill) {
+                    catPill.click();
+                } else {
+                    document.querySelector('.cat-pill[data-cat="all"]').click();
                 }
-                updateCategoryPills();
+            });
+
+            $('saveSettingsBtn').addEventListener('click', function() {
+                const measMap = {};
+                settingsContent.querySelectorAll('.meas-input').forEach(inp => {
+                    const val = inp.value.trim();
+                    if (val) measMap[inp.dataset.drink + '||' + inp.dataset.ing] = val;
+                });
+                saveMeasurements(measMap);
+
+                const newFocus = new Set();
+                settingsContent.querySelectorAll('.focus-checkbox').forEach(cb => {
+                    if (cb.checked) newFocus.add(cb.dataset.drink);
+                });
+                saveFocusSet(newFocus);
+                focusSet = newFocus;
+
+                cocktails = buildCocktails();
+                updateFilteredDrinks();
+                buildCheatSheet();
+                settingsModal.classList.remove('open');
+                updateProgress();
+                resetQuiz();
+            });
+        }
+
+        // ─────────────────────────────────────
+        // EVENT LISTENERS
+        // ─────────────────────────────────────
+        catBar.addEventListener('click', e => {
+            const pill = e.target.closest('.cat-pill');
+            if (!pill) return;
+            currentCategory = pill.dataset.cat;
+            catBar.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            updateFilteredDrinks();
+            updateProgress();
+            resetQuiz();
+        });
+
+        diffBar.addEventListener('click', e => {
+            const tab = e.target.closest('.diff-tab');
+            if (!tab) return;
+            const level = parseInt(tab.dataset.level);
+            currentLevel = level;
+            diffBar.querySelectorAll('.diff-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            updateProgress();
+            resetQuiz();
+        });
+
+        btnSubmit.addEventListener('click', () => {
+            if (isRevealed || currentDrinkIndex < 0) return;
+            const drink = filteredDrinks[currentDrinkIndex];
+            if (currentLevel === 1) checkL1(drink);
+            else if (currentLevel === 2) checkL2(drink);
+            else if (currentLevel === 3) checkL3(drink);
+            else if (currentLevel === 4) checkL4(drink);
+        });
+
+        btnSkip.addEventListener('click', () => {
+            if (isRevealed || currentDrinkIndex < 0) return;
+            const drink = filteredDrinks[currentDrinkIndex];
+            if (currentLevel === 1) skipL1(drink);
+            else if (currentLevel === 2) skipL2(drink);
+            else if (currentLevel === 3) skipL3(drink);
+            else if (currentLevel === 4) skipL4(drink);
+        });
+
+        btnNext.addEventListener('click', loadDrink);
+
+        l3ToggleBtn.addEventListener('click', toggleL3Hints);
+        l4ToggleBtn.addEventListener('click', toggleL4Hints);
+
+        $('btnResetProgress').addEventListener('click', () => {
+            if (confirm('Reset all progress?')) {
+                saveProgress({});
+                updateProgress();
+                resetQuiz();
             }
-            init();
+        });
+
+        cheatToggle.addEventListener('click', () => {
+            cheatSheet.classList.toggle('open');
+            cheatToggle.textContent = cheatSheet.classList.contains('open') ? '📋 Hide Menu ▴' :
+                '📋 Show Full Menu ▾';
+        });
+
+        $('openSettingsBtn').addEventListener('click', openSettings);
+        settingsModal.addEventListener('click', e => {
+            if (e.target === settingsModal) settingsModal.classList.remove('open');
+        });
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Enter' && !isRevealed && currentDrinkIndex >= 0 && document.activeElement?.tagName !==
+                'TEXTAREA') {
+                e.preventDefault();
+                btnSubmit.click();
+            }
+            if ((e.key === 'ArrowRight' || (e.ctrlKey && e.key === 'Enter')) && isRevealed) {
+                e.preventDefault();
+                btnNext.click();
+            }
+        });
+
+        // ─────────────────────────────────────
+        // INIT
+        // ─────────────────────────────────────
+        function init() {
+            updateFilteredDrinks();
+            buildCheatSheet();
+            updateProgress();
+            loadDrink();
+            if (currentCategory === 'focus') {
+                const focusPill = catBar.querySelector('.focus-pill');
+                if (focusPill) focusPill.classList.add('active');
+            }
+            updateCategoryPills();
+        }
+        init();
         })();
     </script>
 </body>
